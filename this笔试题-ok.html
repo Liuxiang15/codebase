@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+
+        // function foo() {
+        //     bar.apply(null, arguments)
+        // }
+        // function bar() {
+        //     console.log(arguments)
+        // }
+        // foo(1, 2, 3, 4, 5)
+        // var x = 1
+        // if (function f() { }) {
+        //     console.log(typeof f)
+        //     x += typeof f
+        // }
+        // console.log(x)
+        // console.log(f)
+
+        /**
+         * 手写一个判断NaN 
+        */
+        // function myIsNaN(num) {
+        //     console.log(Number(num) + "" == "NaN")
+        //     return Number(num) + "" == "NaN"
+        // }
+        // function myIsNaN(num) {
+        //     console.log(num == num)
+        //     return num == num
+        // }
+        // myIsNaN(123)
+        // myIsNaN("113")
+        // myIsNaN(NaN)
+
+        var name = "222"
+        var a = {
+            name: "111",
+            say: function () {
+                console.log(this.name)
+            }
+        }
+        var fun = a.say
+        fun()   // 222
+        a.say() // 111
+        var b = {
+            name: '333',
+            say: function (fun) {
+                // 这里this的确是b
+                fun()   //222
+            }
+        }
+        b.say(a.say)
+        b.say = a.say
+        b.say()   // 333
+
+
+    </script>
+
+</body>
+
+</html>

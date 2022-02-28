@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <style>
+        *{
+            padding: 0;
+            margin: 0;
+        }
+        ul{
+            list-style: none;
+        }
+        div{
+            width: 400px;
+        }
+        div ul li{
+            float: left;
+            width: 100px;
+            height: 40px;
+            background-color:red;
+        }
+        .clear{
+            width: 200px;
+            height: 200px;
+            background-color: yellow;
+            /*clear:both;*/
+        }
+        .clearfix:after{
+            content: '';
+            /* height: 0; */
+            clear:both;
+            /* display: block; */
+            /* visibility: hidden; */
+        }
+    </style>
+</head>
+<body>
+    <div class="clearfix">
+        <ul>
+            <li>python</li>
+            <li>web</li>
+            <li>linux</li>
+        </ul>
+    </div>
+    <div class="clear"></div>
+</body>
+</html>
+

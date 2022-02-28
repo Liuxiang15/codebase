@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <input type="text" value="请输入用户名" style="color: #999;" onfocus="if(this.value=='请输入用户名'){this.value='';this.style.color='#424242'}" onblur="if(this.value==''){this.value='请输入用户名';this.style.color='#999'}">
+    <script>
+        /*
+        * 往targetNode之后插入afterNode
+        */
+        Element.prototype.insertAfter = function (targetNode, afterNode) {
+            var beforeNode = afterNode.nextElementSibling;
+            if (beforeNode == null) {
+                this.appendChild(targetNode)
+            } else {
+                this.insertBefore(targetNode, beforeNode)
+            }
+        }
+        /**
+        返回元素子节点
+        */
+        Element.prototype.myChildren = function () {
+            var temp = [],
+                child = this.childNodes,
+                len = child.length;
+            for (var i = 0; i < len; i++) {
+                if (child[i].nodeType === 1) {
+                    temp.push(child[i])
+                }
+            }
+            return temp
+        }
+        /**
+        往上找第n个父亲节点
+        */
+        function retParent(elem, n) {
+            while (n-- && elem) {
+                elem = elem.parentElement;
+            }
+            return elem;
+        }
+        /**
+        返回与节点e相邻为n的兄弟节点
+        */
+        function retSibling(e, n) {
+            while (n && e) { // 只写一个while提高效率
+                if (n > 0) {
+                    // e = e.nextElementSibling;
+                    if (e.nextElementSibling) {
+                        e = e.nextElementSibling
+                    } else {
+                        for (e = e.nextSibling; e && e.nodeType !== 1; e = e.nextSibling); // 只是开拓思维
+                    }
+                    n--;
+                } else {
+                    // e = e.previousElementSibling;
+                    if (e.ElementSibling) {
+                        e = e.nextElementSibling
+                    } else {
+                        for (e = e.previousSibling; e && e.nodeType !== 1; e = e.previousSibling); // 只是开拓思维
+                    }
+                    n++
+                }
+            }
+            return e
+        }
+
+        /*
+        *获取元素的CSS属性兼容
+         */ 
+        function getStyle(elem, prop) { 
+            if (window.getComputedStyle) {
+                // IE8以及以下不兼容
+                return window.getComputedStyle(elem, null)[0]
+            } else {
+                // IE
+                return elem.currentStyle[prop];
+            }
+        }
+
+
+        // 检测按了哪一个键输出字母
+        document.onkeypress = function (e) {
+            console.log(String.fromCharCode(e.keyCode))
+        }
+    </script>
+</body>
+</html>
