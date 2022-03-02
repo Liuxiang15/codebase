@@ -120,65 +120,7 @@ function addEvent (elem, type, handle) {
     }
 }
 
-/**
- * 浅拷贝
- */ 
-function shallowClone(origin, target) {
-    var target = target || {}
-    for (var prop in origin) {
-        target[prop] = origin[prop]
-    }
-    return target
-}
 
-/**
- * 深拷贝
- */ 
-function deepClone(obj) {
-    // 过滤特殊情况
-    if (obj === null) { return null }
-    if (typeof obj !== 'object') { return obj }
-    if (obj instanceof Date) {
-        return new Date(obj)
-    }
-    if (obj instanceof RegExp) {
-        return new RegExp(obj)
-    }
-    //  不直接创建空对象，克隆的结果和之前保持相同的所属类
-    let newObj = new obj.constructor
-    for (let key in obj) {
-        if (obj.hasOwnProperty(key)) {
-            newObj[key] = this.deepClone(obj[key])
-        }
-    }
-    return newObj
-}
-/**
- * 深拷贝
- * 引用数据类型只考虑对象和数组
-*/
-function deepClone2(origin, target) {
-    // 过滤特殊情况
-    var target = target || {},
-    toStr = Object.prototype.toString,
-    arrStr = "[object Array]";
-    for (var prop in origin) {
-        if (origin.hasOwnProperty(prop)) {
-            if (origin[prop] !== null && typeof (origin[prop] === 'object')) {
-                // if (toStr.call(origin[prop]) == arrStr) {
-                //     target[prop] = []
-                // } else {
-                //     target[prop]= {}
-                // }
-                target[prop] = toStr.call(origin[prop]) == arrStr ? [] : {}
-                deepClone(origin[prop], target[prop])
-            } else {
-                target[prop] = origin[prop]
-            }
-        }
-    }
-    return target
-}
 
 /**
  * 返回数据类型
