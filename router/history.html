@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<body>
+    <ul>
+        <ul>
+            <li><a href='/home'>home</a></li>
+            <li><a href='/about'>about</a></li>
+
+            <div id="routeView"></div>
+        </ul>
+    </ul>
+</body>
+<script>
+    let routerView = routeView
+    window.addEventListener('DOMContentLoaded', onLoad)
+    // history 提供类似 hashchange 事件的 popstate 事件
+    // 但 popstate 事件有些不同：
+    // 1、只有用户点击浏览器倒退按钮和前进按钮，或者使用 JavaScript 调用History.back()、History.forward()、History.go()方法时才会触发。
+    // 2、通过pushState / replaceState或 < a > 标签改变 URL 不会触发 popstate 事件。
+    // 3、页面第一次加载的时候，浏览器不会触发popstate事件。
+    // TODO1:拦截 pushState / replaceState的调用
+    // TODO2: 拦截< a > 标签的点击事件来检测 URL 变化
+    // 通过js 调用history的back，go，forward方法课触发该事件
+
+
+    window.addEventListener('popstate', () => {
+        routerView.innerHTML = location.pathname
+    })
+    function onLoad () {
+        routerView.innerHTML = location.pathname
+        var linkList = document.querySelectorAll('a[href]')
+        linkList.forEach(el => el.addEventListener('click', function (e) {
+            e.preventDefault()
+            history.pushState(null, '', el.getAttribute('href'))
+            routerView.innerHTML = location.pathname
+        }))
+    }
+
+</script>
+
+</html>
