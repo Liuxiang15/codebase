@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+</head>
+
+<body>
+    <ul id="list"></ul>
+    <title>Document</title>
+    <script>
+        // 页面上有个空的无序列表节点，用 < ul ></ > 表示，要往列表中插入 3 个 < li >，每个列表项的文本内容是列表项的插入顺序，取值 1, 2, 3，怎么用原生的 JS 实现这个需求？同时约定，为方便获取节点引用，可以根据需要为 < ul > 节点加上 id 或者 class 属性。
+
+        // function add () {
+        //     var container = document.getElementById('list')
+        //     var html = []
+        //     for (var i = 0; i < 3; i++) {
+        //         var item = document.createElement('li')
+        //         html.push('<li>' + (i + 1) + '</li>')
+        //     }
+        //     container.innerHTML = html.join('')
+        // }
+        // function add2 () {
+        //     // 自执行函数
+        //     (() => {
+        //         var ndContainer = document.getElementById('list')
+        //         if (!ndContainer) {
+        //             return
+        //         }
+        //         var html = []
+        //         for (var i = 0; i < 3; i++) {
+        //             var item = document.createElement('li')
+        //             html.push('<li>' + (i + 1) + '</li>')
+        //         }
+        //         ndContainer.innerHTML = html.join('')
+        //     })()
+        // }
+        // add2()
+
+        // 2.0
+        (() => {
+            var ndContainer = document.getElementById('list');
+            if (!ndContainer) {
+                return;
+            }
+            // EventListener 里面默认的 this 指向当前节点，比较喜欢使用箭头函数的同学则需要格外注意，因为箭头函数会强制改变函数的执行上下文。
+            for (var i = 0; i < 3; i++) {
+                var ndItem = document.createElement('li');
+                ndItem.innerText = i + 1;
+                // ndItem.addEventListener('click', function () {
+                //     alert(this.innerText)
+                // })
+                ndContainer.appendChild(ndItem);
+            }
+
+            ndContainer.addEventListener('click', function (e) {
+                const target = e.target
+                if (target.tagName === 'LI') {
+                    alert(target.innerHTML)
+                }
+            })
+        })();
+
+
+    </script>
+</body>
+
+</html>
