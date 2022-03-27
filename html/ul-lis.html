@@ -46,15 +46,30 @@
             if (!ndContainer) {
                 return;
             }
-            // EventListener 里面默认的 this 指向当前节点，比较喜欢使用箭头函数的同学则需要格外注意，因为箭头函数会强制改变函数的执行上下文。
-            for (var i = 0; i < 3; i++) {
-                var ndItem = document.createElement('li');
-                ndItem.innerText = i + 1;
-                // ndItem.addEventListener('click', function () {
-                //     alert(this.innerText)
-                // })
-                ndContainer.appendChild(ndItem);
+            const total = 1000;
+            const batchSize = 4; //每批插入的节点
+            const batchCount = total / batchSize; //需要批量操作多少次
+            let batchDone = 0; // 已经完成的批处理个数
+            function appendItems () {
+                const fragment = document.createDocumentFragment();
+                for (let i = 0; i < batchSize; i++) {
+                    const ndItem = document.createElement('li');
+                    ndItem.innerText = (batchDone * batchSize) + i + 1;
+                    fragment.appendChild(ndItem)
+                }
+                // 每次批处理只修改 1 次 DOM 目的：减少 DOM 操作次数
+                ndContainer.appendChild(fragment)
+                batchDone += 1;
+                doBatchAppend()
             }
+
+            function doBatchAppend () {
+                if (batchDone < batchCount) {
+                    window.requestAnimationFrame(appendItems)
+                }
+            }
+            // start
+            doBatchAppend()
 
             ndContainer.addEventListener('click', function (e) {
                 const target = e.target
