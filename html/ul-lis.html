@@ -60,16 +60,13 @@
                 // 每次批处理只修改 1 次 DOM 目的：减少 DOM 操作次数
                 ndContainer.appendChild(fragment)
                 batchDone += 1;
-                doBatchAppend()
-            }
-
-            function doBatchAppend () {
                 if (batchDone < batchCount) {
                     window.requestAnimationFrame(appendItems)
                 }
             }
-            // start
-            doBatchAppend()
+            appendItems()
+
+
 
             ndContainer.addEventListener('click', function (e) {
                 const target = e.target
