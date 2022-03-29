@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <div>
+        <p id="p">111</p>
+    </div>
+    <script>
+        p.addEventListener('click', function (event) {
+            // event.stopPropagation();
+
+            // 彻底阻止这个事件的传播，不再触发后面所有click的监听函数
+            event.stopImmediatePropagation();
+            console.log(1);
+        });
+
+        p.addEventListener('click', function (event) {
+            // 会触发
+            console.log(2);
+        });
+    </script>
+</body>
+
+</html>
