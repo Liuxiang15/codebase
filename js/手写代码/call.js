@@ -15,14 +15,14 @@ fn.call(obj, 2); // vortesnail
  * 
  * @param {Object} context 要绑定this的上下文
  */
-Function.prototype.myCall = function (context) { 
+Function.prototype.myCall = function (context, ...args) { 
     // 1、判断调用对象
     if (typeof this !== 'function') {
         throw new Error('Type Error')
     }
     // 2、获取参数列表,注意arguments[0] === context
     // console.log( arguments[0] === context) // true
-    const args = [...arguments].slice(1)
+    // const args = [...arguments].slice(1)
     // 函数返回结果
     let result = null
     // 3、判断是否传入context
