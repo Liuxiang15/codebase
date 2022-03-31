@@ -6,10 +6,24 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+
 </head>
 
 <body>
     <div id="app"></div>
+    <script src="./observer.js"></script>
+    <script src="./vue.js"></script>
+    <script>
+        let vm = new Vue({
+            el: '#app',
+            data: {
+                msg: '123',
+                age: 18
+            }
+        })
+        console.log(vm)
+    </script>
+
     <script>
         // 4、在Vue 响应式中应用到了 发布订阅模式 我们先来了解下
 
@@ -18,23 +32,23 @@
         // 举个现实中例子 作者(发布者)写一篇文章 发到了掘金(信号中心), 掘金可以处理文章然后推送到了首页，然后各自大佬(订阅者)就可以订阅文章
 
 
-        class Vue {
-            constructor() {
-                // 存储时间和回调
-                this._subs = {}
-            }
-            // 监听
-            $on (type, fn) {
-                const callbacks = this._subs[type] || []
-                callbacks.push(fn)
-                this._subs[type] = callbacks
-            }
-            $emit (type, ...args) {
-                const callbacks = this._subs[type] || []
-                callbacks.forEach(fn => fn(...args))
-            }
+        // class Vue {
+        //     constructor() {
+        //         // 存储时间和回调
+        //         this._subs = {}
+        //     }
+        //     // 监听
+        //     $on (type, fn) {
+        //         const callbacks = this._subs[type] || []
+        //         callbacks.push(fn)
+        //         this._subs[type] = callbacks
+        //     }
+        //     $emit (type, ...args) {
+        //         const callbacks = this._subs[type] || []
+        //         callbacks.forEach(fn => fn(...args))
+        //     }
 
-        }
+        // }
 
         // const evevtBus = new Vue()
         // // 监听sum
@@ -74,19 +88,19 @@
             }
         }
 
-        class Observer {
-            // 定义观察者内容更新事件
-            update () {
-                console.log('目标更新了')
-            }
-        }
+        // class Observer {
+        //     // 定义观察者内容更新事件
+        //     update () {
+        //         console.log('目标更新了')
+        //     }
+        // }
         // 测试
-        let sub = new Subject()
-        let obs1 = new Observer(),
-            obs2 = new Observer()
-        sub.addObs(obs1)
-        sub.addObs(obs2)
-        sub.notify()
+        // let sub = new Subject()
+        // let obs1 = new Observer(),
+        //     obs2 = new Observer()
+        // sub.addObs(obs1)
+        // sub.addObs(obs2)
+        // sub.notify()
 
 
 
