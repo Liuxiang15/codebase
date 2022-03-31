@@ -36,14 +36,59 @@
 
         }
 
-        const evevtBus = new Vue()
-        // 监听sum
-        evevtBus.$on('sum', function (...args) {
-            const total = args.reduce((prev, next) => prev + next, 0)
-            console.log(total)
-        })
-        // 触发sum
-        evevtBus.$emit('sum', 1, 2, 4, 5)
+        // const evevtBus = new Vue()
+        // // 监听sum
+        // evevtBus.$on('sum', function (...args) {
+        //     const total = args.reduce((prev, next) => prev + next, 0)
+        //     console.log(total)
+        // })
+        // // 触发sum
+        // evevtBus.$emit('sum', 1, 2, 4, 5)
+
+        //  5.观察者模式 与 发布订阅 的差异
+
+        // 与发布订阅者不同 观察者中 发布者和订阅者(观察者)是相互依赖的 必须要求观察者订阅内容改变事件 ，而发布订阅者是由调度中心进行调度，那么看看观察者模式 是如何相互依赖
+
+        // 目标
+        class Subject {
+            constructor() {
+                this._observeLists = []
+            }
+            // 添加观察者
+            addObs (obs) {
+                if (obs && obs.update) {
+                    // 添加到观察者列表中
+                    this._observeLists.push(obs)
+                }
+            }
+            // 通知观察者
+            notify () {
+                this._observeLists.forEach(obs => {
+                    // 每个观察者受到通知后 更新事件
+                    obs.update()
+                })
+            }
+            // 清空观察者
+            empty () {
+                this._observeLists = []
+            }
+        }
+
+        class Observer {
+            // 定义观察者内容更新事件
+            update () {
+                console.log('目标更新了')
+            }
+        }
+        // 测试
+        let sub = new Subject()
+        let obs1 = new Observer(),
+            obs2 = new Observer()
+        sub.addObs(obs1)
+        sub.addObs(obs2)
+        sub.notify()
+
+
 
 
     </script>
