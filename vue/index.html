@@ -11,28 +11,40 @@
 <body>
     <div id="app"></div>
     <script>
-        // 模拟 Vue的data
-        let data = {
-            msg: '哈哈',
-            age: '18',
-        }
-        // 模拟 Vue 实例
-        let vm = new Proxy(data, {
-            get (target, key) {
-                return target[key]
-            },
-            set (target, key, newValue) {
-                if (target[key] === newValue) {
-                    return
-                }
-                target[key] = newValue
-                document.querySelector('#app').textContent = target[key]
+        // 4、在Vue 响应式中应用到了 发布订阅模式 我们先来了解下
+
+        // 首先来说简单介绍下 一共有三个角色
+        //  发布者、 订阅者、  信号中心  
+        // 举个现实中例子 作者(发布者)写一篇文章 发到了掘金(信号中心), 掘金可以处理文章然后推送到了首页，然后各自大佬(订阅者)就可以订阅文章
+
+
+        class Vue {
+            constructor() {
+                // 存储时间和回调
+                this._subs = {}
             }
+            // 监听
+            $on (type, fn) {
+                const callbacks = this._subs[type] || []
+                callbacks.push(fn)
+                this._subs[type] = callbacks
+            }
+            $emit (type, ...args) {
+                const callbacks = this._subs[type] || []
+                callbacks.forEach(fn => fn(...args))
+            }
+
+        }
+
+        const evevtBus = new Vue()
+        // 监听sum
+        evevtBus.$on('sum', function (...args) {
+            const total = args.reduce((prev, next) => prev + next, 0)
+            console.log(total)
         })
-        // 触发了set方法
-        vm.msg = 'haha'
-        // 触发了get方法
-        console.log(vm.msg)
+        // 触发sum
+        evevtBus.$emit('sum', 1, 2, 4, 5)
+
 
     </script>
 </body>
