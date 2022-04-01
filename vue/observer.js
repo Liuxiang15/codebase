@@ -50,6 +50,8 @@ class Observer {
                 value = newValue
                 // 赋值的话如果是newValue是对象，对象里面的属性也应该设置为响应式的
                 self.walk(newValue)
+                // 触发通知 更新视图
+                dep.notify()
             }
         })
     }

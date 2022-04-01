@@ -50,9 +50,11 @@ class Compiler {
         if (reg.test(val)) {
             // 获取分组1，也就是{{}}里面的内容， 去除前后空格
             let key = RegExp.$1.trim()
+            // 进行替换再赋值给node
+            node.textContent = val.replace(reg, this.vm[key])
             // 创建观察者
             new Watcher(this.vm, key, newValue => { 
-                node.textContent = val.replace(reg, this.vm[key])
+                node.textContent = newValue
             })
         }
     }
@@ -112,7 +114,7 @@ class Compiler {
         node.value = value
         // 踹那个键观察者
         new Watcher(this.vm, key, newValue => { 
-            node.value = value
+            node.value = newValue
         })
         node.addEventListener('input', () => { 
             this.vm[key] = node.value
