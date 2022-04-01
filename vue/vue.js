@@ -15,7 +15,8 @@ class Vue {
         // 这里为什么做了两个重复性的操作呢？重复性两次把 data的属性转为响应式
         // 在obsever.js 中是把 data 的所有属性 加到 data 自身 变为响应式 转成 getter setter方式
         // 在vue.js 中 也把 data的 的所有属性 加到 Vue 上,是为了以后方面操作可以用 Vue 的实例直接访问到 或者在 Vue 中使用 this 访问
-
+        // 编译模板
+        new Compiler(this)
 
     }
     // 将data中的属性注册到Vue

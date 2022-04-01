@@ -1,6 +1,7 @@
 /**
  * observer.js
  * 在这里把 data 中的 属性变为响应式加在自身的身上
+ * 新增：在 obsever.js 中使用Dep
  */
 
 class Observer { 
@@ -33,10 +34,15 @@ class Observer {
         this.walk(value)
         // 保存this
         const self = this
+        // 创建Dep对象
+        let dep = new Dep()
         Object.defineProperty(obj, key, {
             enumerable: true,
             configurable: true,
             get () { 
+                // 添加观察者对象 Dep.target 表示观察者
+                // Dep.target其实是watcher
+                Dep.target && dep.addObs(Dep.target)
                 return value
             },
             set (newValue) {

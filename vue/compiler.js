@@ -1,13 +1,16 @@
 /**
  * compiler.js
  * 实现对文本节点 和 元素节点指令编译
+ * feat:在编译完文本节点后 在这里添加一个 Watcher
+ * feat:v-text v-model 指令 当编译的是元素节点 就添加一个 Watcher
  */
 class Compiler {
     constructor(vm) {
+        console.log('Compiler constrcutor', vm)
         this.vm = vm
         this.el = vm.$el
         // 编译模板
-        this.compile(this.$el)
+        this.compile(this.el)
     }
     /**
      * 编译模板
@@ -37,6 +40,7 @@ class Compiler {
      * @param {*} node 
      */
     compileText (node) {
+        console.log('compileText', node)
         // 核心思想利用把正则表达式把{{}}去掉找到里面的变量
         // 再去Vue找这个变量赋值给node.textContent
         let reg = /\{\{(.+?)\}\}/
@@ -46,7 +50,10 @@ class Compiler {
         if (reg.test(val)) {
             // 获取分组1，也就是{{}}里面的内容， 去除前后空格
             let key = RegExp.$1.trim()
-            node.textContent = val.replace(reg, this.vm[key])
+            // 创建观察者
+            new Watcher(this.vm, key, newValue => { 
+                node.textContent = val.replace(reg, this.vm[key])
+            })
         }
     }
     /**
@@ -79,6 +86,7 @@ class Compiler {
         // 加个后缀加什么无所谓但是要定义相应的方法
         let updateFn = this[attrName + 'Updater']
         // 如果存在这个内置方法 就可以调用了
+        // console.log('update',node, key, attrName )
         updateFn && updateFn.call(this, node, key, this.vm[key])
     }
     /**
@@ -89,15 +97,27 @@ class Compiler {
      */
     textUpdater (node, key, value) {
         node.textContent = value
+        // 创建观察者2
+        new Watcher(this.vm, key, newValue => { 
+            node.textContent = newValue
+        })
     }
     /**
      * v-model
-     * @param {*} node 
+     * @param {Node} node 
      * @param {*} key 
      * @param {*} value 
      */
     modelUpdater (node, key, value) { 
         node.value = value
+        // 踹那个键观察者
+        new Watcher(this.vm, key, newValue => { 
+            node.value = value
+        })
+        node.addEventListener('input', () => { 
+            this.vm[key] = node.value
+        })
+        
     }
     /**
      * 判断元素的属性是否是vue指令
