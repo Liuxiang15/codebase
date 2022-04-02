@@ -12,7 +12,12 @@ class MyPromise {
     constructor(executor) { 
         this._state = PENDING //状态
         this._value = undefined // 数据
-        executor(this._resolve.bind(this), this._reject.bind(this)) 
+        try {
+            executor(this._resolve.bind(this), this._reject.bind(this))
+        } catch (err) { 
+            this._reject(err)
+        }
+
     }
     /**
      * 更改任务状态
@@ -47,7 +52,6 @@ class MyPromise {
 }
 
 const pro = new MyPromise((resolve, reject) => { 
-    resolve(123),
-    reject(234)
+    throw Error(1)
 })
 console.log(pro)
