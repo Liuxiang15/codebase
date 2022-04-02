@@ -6,7 +6,9 @@ class MyPromise {
      * @param {Function} executor  任务执行器，立即执行
      */
     constructor(executor) { 
-        executor(this._resolve, this._reject)
+        this._state = 'pending' //状态
+        this._value = undefined // 数据
+        executor(this._resolve, this._reject) 
     }
 
     /**
@@ -14,22 +16,23 @@ class MyPromise {
      * @param {any} data 任务完成相关数据
      */
     _resolve (data) { 
-        console.log('完成', data)
+        // 改变状态和数据
+        // this的指向取决于如何调用。本来应该是window。但是因为是ES6的class中，严格模式，所以是undefined
+        this._state = 'fulfilled'
+        this._value = data
     }
     /**
      * 标记当前任务失败
      * @param {any} reason 任务失败相关数据
      */
     _reject (reason) { 
-        console.log('失败', reason)
+        this._state = 'rejected'
+        this._value = reason
     }
 
 }
 
 new MyPromise((resolve, reject) => { 
     resolve(123)
-    reject(234)
+    // reject(234)
 })
-// 输出
-// 完成 123
-// 失败 234
