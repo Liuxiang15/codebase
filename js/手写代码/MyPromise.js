@@ -8,7 +8,7 @@ class MyPromise {
     constructor(executor) { 
         this._state = 'pending' //状态
         this._value = undefined // 数据
-        executor(this._resolve, this._reject) 
+        executor(this._resolve.bind(this), this._reject.bind(this)) 
     }
 
     /**
@@ -32,7 +32,8 @@ class MyPromise {
 
 }
 
-new MyPromise((resolve, reject) => { 
+const pro = new MyPromise((resolve, reject) => { 
     resolve(123)
     // reject(234)
 })
+console.log(pro)
