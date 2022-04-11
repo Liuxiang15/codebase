@@ -4,6 +4,28 @@ const PENDING = 'pending'
 const FULFILLED = 'fulfilled'
 const REJECTED = 'rejected'
 
+/**
+ * 运行一个微队列任务
+ * 把传递的函数放到微队列
+ * @param {Function} callback
+ */
+function runMicroTask (callback) { 
+    // 模拟微队列
+    // 判断node环境
+    if (process && process.nextTick) {
+        process.nextTick(callback)
+    } else if (MutationObserver) { 
+        const p = document.createElement('p')
+        const observer = new MutationObserver(callback)
+        observer.observe(p, {
+            childList: true // 观察该元素变化
+        })
+        p.innerHTML = '1'
+    } else {
+        setTimeout(callback, 0)
+    }
+    
+}
 class MyPromise { 
     /**
      * 创建一个Promise
@@ -18,6 +40,16 @@ class MyPromise {
             this._reject(err)
         }
 
+    }
+    /**
+     * PromiseA+规范的then
+     * @param {Function} onFulfilled 
+     * @param {Function} onRejected 
+     */
+    then (onFulfilled, onRejected) { 
+        return new MyPromise((resolve, reject) => {
+
+        })
     }
     /**
      * 更改任务状态
@@ -51,7 +83,20 @@ class MyPromise {
 
 }
 
-const pro = new MyPromise((resolve, reject) => { 
-    throw Error(1)
+// const pro = new MyPromise((resolve, reject) => { 
+//     throw Error(1)
+// })
+// console.log(pro)
+
+
+setTimeout(() => { 
+    console.log(1)
 })
-console.log(pro)
+
+runMicroTask(() => { 
+    console.log(2)
+})
+
+console.log(3)
+// 输出
+// 3 2 1
