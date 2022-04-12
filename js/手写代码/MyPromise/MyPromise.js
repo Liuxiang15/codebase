@@ -34,6 +34,7 @@ class MyPromise {
     constructor(executor) { 
         this._state = PENDING //状态
         this._value = undefined // 数据
+        this._handlers = []; //处理函数的队列 
         try {
             executor(this._resolve.bind(this), this._reject.bind(this))
         } catch (err) { 
@@ -42,13 +43,28 @@ class MyPromise {
 
     }
     /**
+     * 向处理队列中添加一个函数
+     * @param {Function} executor 添加的函数
+     * @param {String} state 
+     * @param {Function} resolve then函数返回的Promise成功后执行的函数
+     * @param {Function} reject then函数返回的Promise失败后执行的函数
+     */
+    _pushHandler (executor, state, resolve, reject) { 
+        this._handlers.push({
+            executor, state, resolve, reject
+        })
+    }
+
+    /**
      * PromiseA+规范的then
      * @param {Function} onFulfilled 
      * @param {Function} onRejected 
      */
-    then (onFulfilled, onRejected) { 
+    then (onFulfilled, onRejected) {   
         return new MyPromise((resolve, reject) => {
-
+            this._pushHandler(onFulfilled, FULFILLED, resolve, reject)
+            this._pushHandler(onRejected, REJECTED, resolve, reject)
+            
         })
     }
     /**
@@ -89,14 +105,24 @@ class MyPromise {
 // console.log(pro)
 
 
-setTimeout(() => { 
-    console.log(1)
-})
+// setTimeout(() => { 
+//     console.log(1)
+// })
 
-runMicroTask(() => { 
-    console.log(2)
-})
+// runMicroTask(() => { 
+//     console.log(2)
+// })
 
-console.log(3)
+// console.log(3)
 // 输出
 // 3 2 1
+
+const pro = new MyPromise((resolve, reject) => { 
+    setTimeout(() => { 
+        resolve(1)
+    }, 1000)
+})
+
+pro.then(function A1 () { })
+pro.then(function B1 () { }, function B1 () { })
+console.log(pro)
