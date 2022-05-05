@@ -7,15 +7,18 @@ function getType (obj) {
     // return Object.prototype.toString.call(obj).replaceAll(new RegExp(/\[|\]|object /g), "");
 }
 
-function deepClone(obj) {
-    
+function deepClone(obj, hash=new Map()) {
+    if (hash.has(obj)) {
+        return obj
+    }
     const type = getType(obj);
     const references = ["Set", "WeakSet", "Map", "WeakMap", "RegExp", "Date", "Error"];
     let res = {};
     if (type === "Object") {
+        hash.set(obj);
         for (const key in obj) {
             if (Object.hasOwnProperty.call(obj, key)) {
-                res[key] = deepClone(obj[key]);
+                res[key] = deepClone(obj[key], hash);
             }
         }
     } else if (type === "Array") {
@@ -42,6 +45,8 @@ const set = new Set();
 set.add("ConardLi");
 set.add("coder");
 
+const target2 = {
+}
 const target = {
     field1: 1,
     field2: undefined,
@@ -66,8 +71,12 @@ const target = {
     func2: function (a, b) {
         return a + b;
     },
+    target2:target2
 };
+target2.target = target
+
 //测试代码
 const test1 = deepClone(target);
 target.field4.push(9);
 console.log('test1: ', test1);
+console.log(test1.target2.target === target)
