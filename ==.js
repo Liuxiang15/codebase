@@ -1,6 +1,7 @@
 // 1、原始值与原始值相比
-// 同类型 原始值比较
-// 不用类型 数字化比较
+// 1.1 同类型 原始值比较 长得一样才相等 除了NaN
+// 1.2 不同类型 数字化比较
+// 特殊：null==undefined,  并且和其他的都不相等
 console.log(null== undefined);
 console.log(null == 0);
 console.log(null == '');
