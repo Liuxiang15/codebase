@@ -1,40 +1,47 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <title>Document</title>
     <style>
-        *{
+        * {
             padding: 0;
             margin: 0;
         }
-        ul{
+
+        ul {
             list-style: none;
         }
-        div{
+
+        div {
             width: 400px;
         }
-        div ul li{
+
+        div ul li {
             float: left;
             width: 100px;
             height: 40px;
-            background-color:red;
+            background-color: red;
         }
-        .clear{
+
+        .clear {
             width: 200px;
             height: 200px;
             background-color: yellow;
-            /*clear:both;*/
+            /* clear: both; */
         }
-        .clearfix:after{
+
+        .clearfix:after {
             content: '';
             /* height: 0; */
-            clear:both;
+            clear: both;
             /* display: block; */
             /* visibility: hidden; */
         }
     </style>
 </head>
+
 <body>
     <div class="clearfix">
         <ul>
@@ -45,5 +52,5 @@
     </div>
     <div class="clear"></div>
 </body>
-</html>
 
+</html>
