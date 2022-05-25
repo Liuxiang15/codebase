@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script>
+        function handleFetchQueue (urls, max, callback) {
+            const originUrlCount = urls.length // 原始url的数量
+            const results = []
+            // 1、同时发起max个请求
+            for (let i = 0; i < urls.length && i < max; i++) {
+                handleOneRequest(urls.shift())
+            }
+            function handleOneRequest (url) {
+                console.log('start', url)
+                fetch(url).then(res => {
+                    results.push(res)
+                }).catch(err => {
+                    results.push(err)
+                }).finally(() => {
+                    console.log('end', url)
+                    // 2、完成1个请求，队列中随便退出一个，加入下一个
+                    if (urls.length) {
+                        handleOneRequest(urls.shift())
+                    }
+                    if (results.length === originUrlCount) {// 请求全部完成
+                        callback(results)
+                    }
+                })
+            }
+        }
+        handleFetchQueue([
+            "http://baidu.com1",
+            "http://bytedance.com2",
+            "http://taobao.com3",
+            "http://baidu.com4",
+            "http://bytedance.com5",
+        ], 2, (res) => {
+            console.log("全部执行完毕", res)
+        })
+    </script>
+</head>
+
+<body>
+</body>
+
+</html>
