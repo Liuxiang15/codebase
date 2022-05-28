@@ -1,0 +1,41 @@
+<html>
+
+<head>
+    <style>
+        button {
+            background-color: black;
+            color: #ffffff;
+            padding: 6px 20px;
+            padding-right: 26px;
+            border: none;
+        }
+
+        .load {
+            height: 2px;
+            width: 2px;
+            display: inline-block;
+            /*box-shadow: 2px 0 0 white ,7px 0 0 white, 12px 0 0 white;*/
+            animation: change 2.4s infinite steps(1, start);
+        }
+
+        @keyframes change {
+            25% {
+                box-shadow: 2px 0 0 white;
+            }
+
+            50% {
+                box-shadow: 2px 0 0 white, 7px 0 0 white;
+            }
+
+            75% {
+                box-shadow: 2px 0 0 white, 7px 0 0 white, 12px 0 0 white;
+            }
+        }
+    </style>
+</head>
+<button>
+    加载
+    <span class="load"></span>
+</button>
+
+</html>
