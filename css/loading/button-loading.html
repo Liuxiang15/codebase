@@ -31,11 +31,109 @@
                 box-shadow: 2px 0 0 white, 7px 0 0 white, 12px 0 0 white;
             }
         }
+
+        /* 加载中法2 */
+        .dotting {
+            color: #FAB500;
+            /*点点的颜色*/
+            display: inline-block;
+            width: 6px;
+            height: 6px;
+            /*点点的高度和宽度*/
+            box-shadow: 7px 0 currentColor, 21px 0 currentColor, 35px 0 currentColor, 49px 0 currentColor, 63px 0 currentColor, 77px 0 currentColor, 91px 0 currentColor, 105px 0 currentColor, 119px 0 currentColor, 133px 0 currentColor;
+            /* for IE9+, ..., 3个点 */
+            animation: dot 4s infinite step-start both;
+            /* for IE10+, ... */
+            *zoom: expression(this.innerHTML='..........');
+            /*  for IE7. 若无需兼容IE7, 此行删除 */
+        }
+
+        .dotting:before {
+            content: '..........';
+        }
+
+        /* for IE8. 若无需兼容IE8, 此行以及下一行删除*/
+        .dotting::before {
+            content: '';
+        }
+
+        /* for IE9+ 覆盖 IE8 */
+        :root .dotting {
+            margin-right: 132px;
+        }
+
+        /* for IE9+,FF,CH,OP,SF 占据空间*/
+
+        @keyframes dot {
+            0% {
+                box-shadow: none;
+            }
+
+            /* 0个点 */
+            10% {
+                box-shadow: 7px 0 currentColor;
+            }
+
+            /* 1个点 */
+            20% {
+                box-shadow: 7px 0 currentColor, 21px 0 currentColor;
+                /* 2个点 */
+            }
+
+            30% {
+                box-shadow: 7px 0 currentColor, 21px 0 currentColor, 35px 0 currentColor;
+                /* 3个点 */
+            }
+
+            40% {
+                box-shadow: 7px 0 currentColor, 21px 0 currentColor, 35px 0 currentColor, 49px 0 currentColor;
+                /* 4个点 */
+            }
+
+            50% {
+                box-shadow: 7px 0 currentColor, 21px 0 currentColor, 35px 0 currentColor, 49px 0 currentColor, 63px 0 currentColor;
+                /* 5个点 */
+            }
+
+            60% {
+                box-shadow: 7px 0 currentColor, 21px 0 currentColor, 35px 0 currentColor, 49px 0 currentColor, 63px 0 currentColor, 77px 0 currentColor;
+                /* 6个点 */
+            }
+
+            70% {
+                box-shadow: 7px 0 currentColor, 21px 0 currentColor, 35px 0 currentColor, 49px 0 currentColor, 63px 0 currentColor, 77px 0 currentColor, 91px 0 currentColor;
+                /* 7个点 */
+            }
+
+            80% {
+                box-shadow: 7px 0 currentColor, 21px 0 currentColor, 35px 0 currentColor, 49px 0 currentColor, 63px 0 currentColor, 77px 0 currentColor, 91px 0 currentColor, 105px 0 currentColor;
+                /* 8个点 */
+            }
+
+            90% {
+                box-shadow: 7px 0 currentColor, 21px 0 currentColor, 35px 0 currentColor, 49px 0 currentColor, 63px 0 currentColor, 77px 0 currentColor, 91px 0 currentColor, 105px 0 currentColor, 119px 0 currentColor;
+                /* 9个点 */
+            }
+
+            100% {
+                box-shadow: 7px 0 currentColor, 21px 0 currentColor, 35px 0 currentColor, 49px 0 currentColor, 63px 0 currentColor, 77px 0 currentColor, 91px 0 currentColor, 105px 0 currentColor, 119px 0 currentColor, 133px 0 currentColor;
+                /* 10个点 */
+            }
+        }
     </style>
 </head>
-<button>
-    加载
-    <span class="load"></span>
-</button>
+
+<body>
+    <button>
+        加载
+        <span class="load"></span>
+    </button>
+
+    <button>
+        加载
+        <span class="dotting"></span>
+    </button>
+
+</body>
 
 </html>
