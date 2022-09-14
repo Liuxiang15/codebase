@@ -15,26 +15,29 @@
         .center {
             flex: 1;
             background-color: lightcoral;
+            order: 2;
         }
 
         .left {
             flex: 0 0 200px;
             /* width: 200px; */
             background-color: lightcyan;
+            order: 1;
         }
 
         .right {
             /* width: 150px; */
             flex: 0 0 150px;
             background-color: lightgreen;
+            order: 3;
         }
     </style>
 </head>
 
 <body>
     <div id="container" class="clearfix">
-        <p class="left">左边</p>
         <p class="center">中间</p>
+        <p class="left">左边</p>
         <p class="right">右边</p>
     </div>
 
