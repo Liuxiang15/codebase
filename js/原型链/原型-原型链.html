@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // function Person() {
+        // var this = {
+        //     __proto__: Person.prototype
+        // }
+        // }
+        // var person1 = new Person()
+        // console.log(person1.name)
+        // person1.__proto__ = { name: "修改原型" }
+        // console.log(person1.name)
+
+        // Person.prototype.name = 'sunny'
+        // function Person() {
+
+        // }
+
+        // var person = new Person()
+        // Person.prototype = {
+        //     name: 'cherry'
+        // }
+        // console.log(person.name)
+
+        // 原型、原型链
+
+        // Grand.prototype.lastName = "Deng"
+        // function Grand() {
+
+        // }
+        // // var grand = new Grand()
+        // Father.prototype = Grand
+        // function Father() {
+        //     this.name = '徐明'
+        // }
+        // var father = new Father()
+        // Son.prototype = Father
+        // function Son() {
+        //     this.hobbit = "smoke"
+        // }
+        // var son = new Son()
+        // console.log(son.hobbit)
+        // console.log(son.name)
+        // console.log(son.lastName)
+        // console.log(son.toString())
+
+        // Person.prototype = {
+        //     name: "a",
+        //     sayName: function () {
+        //         var name
+        //         console.log(this.name)
+        //         console.log(name)
+        //     }
+        // }
+        // function Person() {
+
+        // }
+        // var person = new Person()
+        // person.sayName()
+        // var obj = {}
+        // var obj1 = new Object()
+        // console.log(obj, obj1)
+        // Person.prototype.name = "sunny"
+        // function Person(){
+
+        // }
+        // var person = Object.create(Person.prototype)
+        // console.log(person.name)
+
+        // var obj = Object.create(null)
+        // console.log(obj)
+        // obj.name = "小洪"
+        // console.log(obj)
+        // obj.__proto__ = {
+        //     age: 12
+        // }
+        // console.log(obj.age)
+
+
+            // var num = 123;
+            // Number.prototype.toString = function () {
+
+            // }
+            // Number.prototype.__proto__ = Object.prototype  
+
+        // function Person(){}
+        // Person.prototype = {
+        //     toString: function () {
+        //         return "hehe"
+        //     }
+        // }
+        // var p = new Person()
+        // console.log(p.toString())
+
+        // var obj = Object.create(null)
+        // // document.write(obj)
+        // obj.toString = function () {
+        //     return "老邓身体好"
+        // }
+        // document.write(obj)
+        // for (var i = 0;i  < 3; i++) {
+        //     var num = Math.floor(Math.random() * 100) 
+        //     console.log(num)
+        // }
+
+        // function test(){
+        //     console.log("test")
+        // }
+        // test()
+        // test.call()
+        // function Person(name, age) {
+        //     // this = obj
+        //     this.name = name
+        //     this.age = age
+        // }
+        // var obj = {}
+        // Person.call(obj, 'cheng', 30)
+        // console.log(obj)
+
+        // function Person(name, age) {
+        //     this.name = name
+        //     this.age = age
+        // }
+
+        // function Student (name, age, grade) {
+        //     // Person.call(this, name, age)
+        //     Person.apply(this, [name, age])
+        //     this.grade = grade
+        // }
+        // var student = new Student("刘祥", 18, 2015)
+        // console.log(student)
+
+        // function inherit(Target, Origin){
+        //     Target.prototype = Origin.prototype
+        // }
+
+        // function F(){
+        //     F.prototype = Father.prototype
+        // }
+        // Son.prototype = new F()
+
+        function inherit(Target, Origin) {
+            function F(){}
+            F.prototype = Origin.prototype
+            Target.prototype = new F()
+            // 重置constructor
+            Target.prototype.constructor = Target
+            // 记录超类
+            Target.prototype.uper = Origin
+        }
+
+        var inherit = (function () {
+            // F是私有化变量，中间
+            var F = function () {}
+            return function(Target, Origin) {
+                F.prototype = Origin.prototype
+                Target.prototype = new F()
+                // 重置constructor
+                Target.prototype.constructor = Target
+                // 记录超类
+                Target.prototype.uper = Origin
+            }
+        })
+    //     Father.prototype.lastName = "liu"
+    //     function Father(){}
+    //     function Son(){}
+    //     inherit(Son, Father)
+    //     var son = new Son()
+    //     console.log(son.lastName)
+    //     console.log(son.constructor)
+    // console.log(son.uper)
+
+    // 闭包 私有化变量
+//     function Deng(name, wife){
+//         var prepareWife = "小张"
+//         this.name = name
+//         this.wife = wife
+//         this.divorce = function() {
+//             this.wife = prepareWife
+//         }
+//         this.changePrepareWife = function (target){
+//             prepareWife  = target
+//         }
+//         this.sayPrepareWife = function () {
+//             console.log(prepareWife)
+//         }
+//     }
+//    var deng = new Deng("deng", "小刘")
+//    console.log(deng.prepareWife)
+//    deng.sayPrepareWife()
+
+
+    </script>
+</body>
+
+</html>
