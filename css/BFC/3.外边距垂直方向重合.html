@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        .box1 {
+            width: 100px;
+            height: 100px;
+            background-color: red;
+            margin-bottom: 10px;
+        }
+
+        .box2 {
+            width: 100px;
+            height: 100px;
+            background-color: blue;
+            margin-top: 10px;
+        }
+
+        /* 在 box2 外部再包含一个 div，并且将这个 div 设置为 BFC */
+        .container {
+            overflow: hidden;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="box1"></div>
+    <!-- <div class="box2"></div> -->
+
+    <div class="container">
+        <div class="box2"></div>
+    </div>
+</body>
+
+</html>
