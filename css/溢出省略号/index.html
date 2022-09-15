@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .single-ellipsis {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            background-color:antiquewhite;
+        }
+
+        .multiple-ellipsis {
+            display: -webkit-box;
+            -webkit-box-orient: vertical;
+            /* 行数 */
+            -webkit-line-clamp: 3;
+            overflow: hidden;
+            background-color: aqua;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="single-ellipsis">
+        Lorem ipsum dolor sit amet consectetur adipisicing elit. Earum officiis quam dolore cupiditate eligendi qui recusandae quo repellendus at placeat eum quibusdam repudiandae quos, optio fuga corrupti perspiciatis reprehenderit quia quisquam aliquid porro facere? Cupiditate accusamus sunt error commodi doloremque?
+    </div>
+    <div class="multiple-ellipsis">
+        Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptatum libero qui repudiandae necessitatibus, distinctio earum nihil, repellat non placeat aliquid ab animi. A hic illum atque accusamus optio rerum maxime, nostrum, id nesciunt dolore doloremque porro, eaque non esse architecto error provident quam iusto harum inventore molestiae assumenda magni magnam. Iste eos ut aperiam obcaecati minima ullam. Unde sequi illum at dicta itaque soluta sapiente voluptatum adipisci porro quaerat accusantium nihil quis vel distinctio repellat totam repudiandae aut eligendi blanditiis aspernatur, quo nam, quam magnam dolore? Similique impedit omnis quas aut voluptates incidunt quaerat, adipisci eum ex rem dolorem tenetur.
+    </div>
+</body>
+
+</html>
