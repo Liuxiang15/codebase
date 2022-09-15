@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        div {
+            width: 200px;
+            height: 200px;
+            margin: 10px;
+            background-color: antiquewhite;
+        }
+
+        .box1 {
+            display: none;
+        }
+
+        .box2 {
+            visibility: hidden;
+        }
+
+        .box3 {
+            opacity: 0;
+        }
+        .childbox {
+            width: 100px;
+            height: 100px;
+            background-color:aqua;
+            visibility: visible;
+            opacity: 1;
+        }
+
+    </style>
+</head>
+
+<body>
+    <div hidden class="box0" onclick="console.log('click box0 hidden')">
+    </div>
+    <div class="box1" onclick="console.log('click box1 display: none')">
+        display:none
+        <div class="childbox box11">
+            display:none的子元素
+        </div>
+    </div>
+    <div class="box2" onclick="console.log('click box2 visibility: hidden')">
+        visibility: hidden;
+        <div class="childbox box21">
+            visibility: hidden的子元素
+        </div>
+    </div>
+    <div class="box3" onclick="console.log('click box3 opacity: 0;')">
+        opacity: 0;
+        <div class="childbox box31">
+            opacity: 0的子元素
+        </div>
+    </div> 
+
+
+
+    <!-- 结构： 
+        display:none: 会让元素完全从渲染树中消失，渲染的时候不占据任何空间, 不能点击，              visibility: hidden:不会让元素从渲染树消失，渲染元素继续占据空间，只是内容不可见，不能点击 
+        opacity: 0:不会让元素从渲染树消失，渲染元素继续占据空间，只是内容不可见，可以点击
+        
+        
+        继承： 
+        display: none和opacity: 0：是非继承属性，子孙节点消失由于元素从渲染树消失造成，通过修改子孙节点属性无法显示。 
+        visibility:hidden：是继承属性，子孙节点消失由于继承了hidden，通过设置visibility: visible;可以让子孙节点显式。
+        
+        
+        性能： 
+        displaynone : 修改元素会造成文档回流,读屏器不会读取display: none元素内容，性能消耗较大 visibility:hidden: 修改元素只会造成本元素的重绘,性能消耗较少读屏器读取visibility:
+        hidden元素内容 opacity: 0 ： 修改元素会造成重绘，性能消耗较少
+        
+        作者：一只前端小菜鸟
+        链接：https://juejin.cn/post/7092747389903044638
+        来源：稀土掘金
+        著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。 -->
+
+</body>
+
+</html>
