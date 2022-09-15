@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <div id="content"
+        style="height:150px;line-height:150px;text-align:center; color: #fff;background-color:#ccc;font-size:80px;">
+    </div>
+    <script>
+        let num = 1;
+        let content = document.getElementById('content');
+
+        function count () {
+            content.innerHTML = num++;
+        };
+        // 原版
+        // content.onmousemove = count;
+
+        // 防抖1
+        content.onmousemove = debounce(count, 1000)
+
+        // 防抖debounce 1
+        // 非立即 not immediate
+        // 过wait之后再执行
+        // 缺点：没有传参
+        function debounce (func, wait) {
+            let timer = null
+            return function () {
+                if (timer) clearTimeout(timer)
+                timer = setTimeout(func, wait)
+            }
+        }
+
+        // 防抖debounce 1.1
+        // 非立即 not immediate
+        // 过wait之后再执行
+        // 传参
+        // function debounce(func, wait){
+        //     let timer = null
+        //     let _this = this
+        //     let args = arguments
+        //     return function () {
+        //         if (timer) clearTimeout(timer)
+        //         timer = setTimeout(() => {
+        //             func.apply(_this, args)
+        //         }, wait)
+        //     }
+        // }
+
+        // 防抖debounce 2
+        // 立即执行 immediate
+        // function debounce () {
+
+        // }
+
+    </script>
+</body>
+
+<!-- codebased -->
+
+</html>
