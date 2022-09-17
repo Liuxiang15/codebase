@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        /* 要说现在较为流行和使用较多的布局方案，那么非 flex 莫属了，那么举例两个最常见的使用方式 ~
+
+直接在 flex-container 上通过几行代码即可很优雅的实现 */
+
+
+        .parent {
+            width: 90vw;
+            height: 90vh;
+            border: 3px solid steelblue;
+
+            /* 核心代码 */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .child {
+            background: tomato;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="parent">
+        <div class="child">这是居中元素</div>
+    </div>
+</body>
+
+</html>

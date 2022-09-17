@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        /* 利用绝对定位百分比 50% 来实现，因为当前元素的百分比是基于相对定位（也就是父元素）来定位的;
+
+        然后再用负的 margin-top 和 margin-left 来进行简单的位移即可，因为现在的负 margin 是基于自身的高度和宽度来进行位移的。 */
+
+
+        .parent {
+            position: relative;
+            width: 90vw;
+            height: 90vh;
+            border: 3px solid steelblue;
+        }
+
+        .child {
+            background: tomato;
+            width: 100px;
+            height: 100px;
+            /* 核心代码 */
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            margin-top: -50px;
+            margin-left: -50px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="parent">
+        <div class="child"></div>
+    </div>
+</body>
+
+</html>

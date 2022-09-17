@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        /* 通过最经典的 table 元素来进行水平垂直居中，不过代码看起来会很冗余，不推荐使用； */
+
+
+        .parent {
+            width: 90vw;
+            height: 90vh;
+            border: 3px solid steelblue;
+            /* 核心代码 */
+            text-align: center;
+        }
+
+        .child {
+            background: tomato;
+            /* 核心代码 */
+            display: inline-block;
+        }
+    </style>
+</head>
+
+<body>
+    <table>
+        <tbody>
+            <tr>
+                <td class="parent">
+                    <div class="child">我是表格居中元素</div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+
+</body>
+
+</html>

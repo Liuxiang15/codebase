@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        /* 如果一定要使用 table 的特性，但是不想写 table 元素的话，那么css-table 就很适合你； */
+
+
+        .parent {
+            width: 90vw;
+            height: 90vh;
+            border: 3px solid steelblue;
+            /* 核心代码 */
+            display: table-cell;
+            text-align: center;
+            vertical-align: middle;
+        }
+
+        .child {
+            background: tomato;
+            /* 核心代码 */
+            display: inline-block;
+        }
+    </style>
+</head>
+
+<body>
+    <table>
+        <tbody>
+            <tr>
+                <td class="parent">
+                    <div class="child">我是表格居中元素</div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+
+</body>
+
+</html>
