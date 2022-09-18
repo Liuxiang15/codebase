@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .container {
+            display: grid;
+            /* grid-template-columns: 100px 100px 100px;
+            grid-template-rows: 100px 100px 100px; */
+
+            /* grid-template-columns: 33.33% 33.33% 33.33%;
+  grid-template-rows: 33.33% 33.33% 33.33%; */
+
+            /* （1）repeat() */
+            /* grid-template-columns: repeat(3, 33.33%);
+            grid-template-rows: repeat(3, 33.33%); */
+
+            /* （2）auto-fill 关键字 */
+            /* grid-template-columns: repeat(auto-fill, 100px); */
+
+            /* （3）fr 关键字 */
+
+            /* grid-template-columns: 1fr 1fr; */
+
+            /* fr可以与绝对长度的单位结合使用，这时会非常方便。 */
+            /* grid-template-columns: 150px 1fr 2fr; */
+
+            /* （4）minmax()
+
+            minmax()函数产生一个长度范围，表示长度就在这个范围之中。它接受两个参数，分别为最小值和最大值。
+            minmax(100px, 1fr)表示列宽不小于100px，不大于1fr
+            */
+
+            /* grid-template-columns: 1fr 1fr minmax(100px, 1fr); */
+
+            /* （5）auto 关键字
+
+            auto关键字表示由浏览器自己决定长度。 */
+
+            /* grid-template-columns: 100px auto 100px; */
+
+            /* （6）网格线的名称
+
+            grid-template-columns属性和grid-template-rows属性里面，还可以使用方括号，指定每一根网格线的名字，方便以后的引用。 */
+            /* grid-template-columns: [c1] 100px [c2] 100px [c3] auto [c4];
+            grid-template-rows: [r1] 100px [r2] 100px [r3] auto [r4]; */
+
+            /* （7）布局实例
+
+            grid-template-columns属性对于网页布局非常有用。两栏式布局只需要一行代码。 */
+            grid-template-columns: 70% 30%;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div>1</div>
+        <div>2</div>
+        <div>3</div>
+        <div>4</div>
+        <div>5</div>
+        <div>6</div>
+        <div>7</div>
+        <div>8</div>
+        <div>9</div>
+    </div>
+</body>
+
+</html>

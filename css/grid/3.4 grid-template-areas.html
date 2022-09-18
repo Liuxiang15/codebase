@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        /* 网格布局允许指定"区域"（area），一个区域由单个或多个单元格组成。grid-template-areas属性用于定义区域。 */
+        .container1 {
+            display: grid;
+            grid-template-columns: 100px 100px 100px;
+            grid-template-rows: 100px 100px 100px;
+
+            grid-template-areas: 'a a a'
+                'b b b'
+                'c c c';
+            /* 上面代码将9个单元格分成a、b、c三个区域。 */
+        }
+
+        .container2 {
+            display: grid;
+            grid-template-columns: 100px 100px 100px;
+            grid-template-rows: 100px 100px 100px;
+
+            grid-template-areas: 'a a a'
+                'b b b'
+                'c c c';
+            /* 上面代码将9个单元格分成a、b、c三个区域。 */
+            grid-auto-flow: row;
+        }
+
+        .container2 :first-child {
+            background-color: rgba(0, 0, 255, .2);
+            border: 3px solid #00f;
+            grid-area: a;
+        }
+
+        .container2 :nth-child(2) {
+            background-color: rgba(255, 0, 200, .2);
+            border: 3px solid #663399;
+            grid-area: b;
+        }
+
+        .container2 :nth-child(3) {
+            background-color: rgba(94, 255, 0, .2);
+            border: 3px solid green;
+            grid-area: c;
+        }
+
+        .container3 {
+            display: grid;
+            grid-template-columns: 100px 100px 100px;
+            grid-template-rows: 100px 100px 100px;
+            grid-template-areas: "header header header"
+                "main main sidebar"
+                "footer footer footer";
+            /* 上面代码中，顶部是页眉区域header，底部是页脚区域footer，中间部分则为main和sidebar。 */
+        }
+
+        .container3 :first-child {
+            background-color: rgba(0, 0, 255, .2);
+            border: 3px solid #00f;
+            grid-area: header;
+        }
+
+        .container3 :nth-child(2) {
+            background-color: rgba(255, 0, 200, .2);
+            border: 3px solid #663399;
+            grid-area: main;
+        }
+
+        .container3 :nth-child(3) {
+            background-color: rgba(94, 255, 0, .2);
+            border: 3px solid green;
+            grid-area: sidebar;
+        }
+
+        .container3 :nth-child(4) {
+            background-color:aliceblue;
+            border: 3px solid green;
+            grid-area: footer;
+        }
+    </style>
+    </style>
+
+</head>
+
+<body>
+    <div class="container1">
+        <div>1</div>
+        <div>2</div>
+        <div>3</div>
+        <div>4</div>
+        <div>5</div>
+        <div>6</div>
+        <div>7</div>
+        <div>8</div>
+        <div>9</div>
+        
+    </div>
+    <div class="container2">
+        <div>1</div>
+        <div>2</div>
+        <div>3</div>
+
+    </div>
+    <div class="container3">
+        <div>header</div>
+        <div>main</div>
+        <div>sidebar</div>
+        <div>footer</div>
+       
+    </div>
+</body>
+
+</html>
