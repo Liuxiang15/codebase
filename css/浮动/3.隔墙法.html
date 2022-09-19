@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>隔墙法</title>
+    <style>
+        /* 核心思想就是在两个浮动的元素之间添加一个空的 div 作为一堵“墙”，从而让后面的浮动元素，不去追前面的浮动元素。 */
+        ul {
+            background-color: aqua;
+        }
+
+        .two {
+            margin-top: 10px;
+        }
+
+        .clearfix {
+            clear: both;
+        }
+
+        li {
+            float: left;
+            width: 100px;
+            height: 20px;
+            background-color: pink;
+        }
+    </style>
+
+</head>
+
+<body>
+    <ul>
+        <li>导航1</li>
+        <li>导航2</li>
+        <li>导航3</li>
+    </ul>
+    <div class="clearfix"></div>
+    <ul class="two">
+        <li>游戏</li>
+        <li>动漫</li>
+        <li>音乐</li>
+    </ul>
+</body>
+
+</html>

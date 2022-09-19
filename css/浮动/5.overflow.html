@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>overflow</title>
+    <style>
+        /* overflow 属性本来是用作处理溢出内容的显示方式的。
+
+当给父元素添加 overflow:hidden 之后，父元素就会形成一个 BFC，一块独立的显示区域，不受外界影响，所以通过这种方式也能够去除浮动的副作用。 */
+        .two {
+            margin-top: 10px;
+        }
+
+        ul {
+            overflow: hidden;
+            background: greenyellow;
+        }
+
+        li {
+            float: left;
+            width: 100px;
+            height: 20px;
+            background-color: pink;
+        }
+    </style>
+</head>
+
+<body>
+    <ul>
+        <li>导航1</li>
+        <li>导航2</li>
+        <li>导航3</li>
+    </ul>
+    <ul class="two">
+        <li>游戏</li>
+        <li>动漫</li>
+        <li>音乐</li>
+    </ul>
+</body>
+
+</html>

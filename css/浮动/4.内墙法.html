@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>内墙法</title>
+    <style>
+        div {
+            background-color: aquamarine;
+        }
+        /* 通过隔墙法，后面又衍生出了内墙法。内墙法的出现，可以让浮动的元素也能撑开父元素的高。
+
+正常情况下，没有高的父元素，里面的子元素一旦浮动，高度也就没有了 */
+
+        .two {
+            margin-top: 10px;
+        }
+
+        .clearfix {
+            clear: both;
+        }
+
+        /* 在上面的代码中，我们使用内墙法清除了浮动，并且父元素的高度也被撑起来了，margin 也是正常的 */
+
+        li {
+            float: left;
+            width: 100px;
+            height: 20px;
+            background-color: pink;
+        }
+    </style>
+</head>
+
+<body>
+    <div>
+        <ul>
+            <li>导航1</li>
+            <li>导航2</li>
+            <li>导航3</li>
+        </ul>
+        <div class="clearfix"></div>
+    </div>
+    <ul class="two">
+        <li>游戏</li>
+        <li>动漫</li>
+        <li>音乐</li>
+    </ul>
+</body>
+
+</html>
