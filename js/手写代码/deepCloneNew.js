@@ -9,7 +9,7 @@ function getType (obj) {
 
 function deepClone(obj, hash=new Map()) {
     if (hash.has(obj)) {
-        return obj
+        return obj // 解决循环引用的问题
     }
     const type = getType(obj);
     const references = ["Set", "WeakSet", "Map", "WeakMap", "RegExp", "Date", "Error"];
@@ -17,7 +17,10 @@ function deepClone(obj, hash=new Map()) {
     if (type === "Object") {
         hash.set(obj);
         for (const key in obj) {
-            if (Object.hasOwnProperty.call(obj, key)) {
+            if (Object.prototype.hasOwnProperty.call(obj, key)) {
+                // 多种判断是自身属性的方法
+                // Object.hasOwnProperty.call(obj, key)
+                // obj.hasOwnProperty(key)
                 res[key] = deepClone(obj[key], hash);
             }
         }
