@@ -15,11 +15,10 @@ const t1 = new Test(1)
 console.log(t1)
 
 
-function myNew (fn) { 
+function myNew (fn, ...args) { 
     // const obj = new Object()
     // obj.__proto__ = fn.prototype
     const obj = Object.create(fn.prototype) 
-    const args = [...arguments].slice(1)
     const result = fn.call(obj, ...args)
     // 在JavaScript构造函数中：
     // 如果return值类型，那么对构造函数没有影响，实例化对象返回空对象；
