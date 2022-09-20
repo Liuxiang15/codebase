@@ -34,3 +34,12 @@ const p2 = myNew(Person, '小花', 9)
 console.log(p2)
 const t2 = myNew(Test, 1)
 console.log(t2)
+
+
+// function Test () { 
+//     return {
+//         "a":1
+//     }
+// }
+
+// console.log(new Test())
