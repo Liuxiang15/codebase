@@ -1,3 +1,4 @@
+// https://github.com/mqyqingfeng/Blog/issues/11
 var obj = {
     value: "vortesnail",
     num:1
@@ -15,14 +16,14 @@ fn.apply(obj, [2]); // vortesnail
  * 
  * @param {Object} context 要绑定this的上下文
  */
-Function.prototype.myApply = function (context) { 
+Function.prototype.myApply = function (context, args) { 
     // 1、判断调用对象
     if (typeof this !== 'function') {
         throw new Error('Type Error')
     }
     // 2、获取参数列表,注意这里最多只有一个arguments[]
     // console.log( arguments[0] === context) // true
-    const args = arguments[1]
+    // const args = arguments[1]
 
     // 函数返回结果
     let result = null
@@ -35,11 +36,12 @@ Function.prototype.myApply = function (context) {
     
     // 5、执行要被调用的方法
     // 注意这里判断参数
-    if (args) { 
-        result = context[fnSymbol](...args)
-    } else {
-        result = context[fnSymbol]()
-    }
+    // if (args) {
+    //     result = context[fnSymbol](...args)
+    // } else {
+    //     result = context[fnSymbol]()
+    // }
+    result = context[fnSymbol](...args)
 
     // 6、删除手动增加的属性方法
     delete context[fnSymbol]
