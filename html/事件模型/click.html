@@ -9,22 +9,41 @@
 </head>
 
 <body>
-    <div>
-        <p id="p">111</p>
+    <div id="div">
+        <p id="p" onClick="(e) => false">111</p>
     </div>
     <script>
+        p.onclick = function(event){
+            return false
+        }
         p.addEventListener('click', function (event) {
+            // 方法一：IE9+，其他主流浏览器
             // event.stopPropagation();
 
+            // 方法二：火狐未实现
+            // event.cancelBubble = true;
+
+
             // 彻底阻止这个事件的传播，不再触发后面所有click的监听函数
-            event.stopImmediatePropagation();
-            console.log(1);
+            // event.stopImmediatePropagation();
+
+
+            console.log('p被点击了');
+
+            // 方法三：不建议滥用，jq 中可以同时阻止冒泡和默认事件
+            // 默认设置不生效，该冒的泡是一个都不会少啊
+            return false;
         });
 
         p.addEventListener('click', function (event) {
             // 会触发
-            console.log(2);
+            console.log('p被点击了2');
+            return false;
         });
+
+        div.addEventListener('click', event=>{
+            console.log('div 被点击了')
+        })
     </script>
 </body>
 
