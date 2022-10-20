@@ -58,7 +58,7 @@ class MyPromise {
      * 根据实际情况执行队列
      */
     _runHandlers () {
-        if (this.state === PENDING) {
+        if (this._state === PENDING) {
             // 目前任务仍在挂起
             return
         }
@@ -122,29 +122,14 @@ class MyPromise {
 
 }
 
-// const pro = new MyPromise((resolve, reject) => { 
-//     throw Error(1)
-// })
-// console.log(pro)
-
-
-// setTimeout(() => { 
-//     console.log(1)
-// })
-
-// runMicroTask(() => { 
-//     console.log(2)
-// })
-
-// console.log(3)
-// 输出
-// 3 2 1
 
 const pro = new MyPromise((resolve, reject) => { 
     setTimeout(() => { 
         resolve(1)
-    }, 1000)
+    })
 })
 
 pro.then(function A1 () { })
-pro.then(function B1 () { }, function B1 () { })
+setTimeout(() => {
+    pro.then(function B1 () { })
+})
