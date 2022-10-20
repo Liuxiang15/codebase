@@ -62,6 +62,8 @@ class MyPromise {
             // 目前任务仍在挂起
             return
         }
+        console.log(`处理${this._handlers.length}个函数`);
+        console.log(this._handlers);
         while (this._handlers[0]) {
             const handler = this._handlers[0]
             this._runOneHandler(handler)
@@ -80,7 +82,7 @@ class MyPromise {
      * @param {Function} onFulfilled 
      * @param {Function} onRejected 
      */
-    then (onFulfilled, onRejected) {   
+    then (onFulfilled, onRejected) { 
         return new MyPromise((resolve, reject) => {
             this._pushHandler(onFulfilled, FULFILLED, resolve, reject)
             this._pushHandler(onRejected, REJECTED, resolve, reject)
@@ -108,7 +110,7 @@ class MyPromise {
     _resolve (data) { 
         // 改变状态和数据
         // this的指向取决于如何调用。本来应该是window。但是因为是ES6的class中，严格模式，所以是undefined
-         this._changeState(FULFILLED, data)
+        this._changeState(FULFILLED, data)
     }
     /**
      * 标记当前任务失败
@@ -146,4 +148,3 @@ const pro = new MyPromise((resolve, reject) => {
 
 pro.then(function A1 () { })
 pro.then(function B1 () { }, function B1 () { })
-console.log(pro)
