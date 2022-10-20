@@ -54,6 +54,26 @@ class MyPromise {
             executor, state, resolve, reject
         })
     }
+    /**
+     * 根据实际情况执行队列
+     */
+    _runHandlers () {
+        if (this.state === PENDING) {
+            // 目前任务仍在挂起
+            return
+        }
+        while (this._handlers[0]) {
+            const handler = this._handlers[0]
+            this._runOneHandler(handler)
+            this._handlers.shift()
+        }
+    }
+    /**
+     * 处理一个handler
+     */
+    _runOneHandler (handler) {
+         
+    }
 
     /**
      * PromiseA+规范的then
@@ -64,7 +84,7 @@ class MyPromise {
         return new MyPromise((resolve, reject) => {
             this._pushHandler(onFulfilled, FULFILLED, resolve, reject)
             this._pushHandler(onRejected, REJECTED, resolve, reject)
-            
+            this._runHandlers() // 执行队列
         })
     }
     /**
@@ -78,6 +98,7 @@ class MyPromise {
         }
         this._state = newState
         this._value = newValue
+        this._runHandlers() // 状态变化执行队列
     }
 
     /**
