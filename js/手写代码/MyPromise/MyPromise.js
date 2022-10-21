@@ -178,7 +178,35 @@ class MyPromise {
         this._changeState(REJECTED, reason)
     }
 
+    /* 返回一个已完成的Promise
+     * 特殊情况：
+     * 1. 传递的data本身就是ES6的Promise对象
+     * 2. 传递的data是PromiseLike（Promise A+），返回新的Promise，状态和其保持一致即可
+     * @param {any} data
+     */
+    static resolve (data) {
+        if (data instanceof MyPromise) {
+            return data
+        }
+        return new MyPromise((resolve, reject) => {
+            if (isPromise(data)) {
+                data.then(resolve, reject)
+            } else {
+                resolve(data)
+            }
+        })
+    }
+    /**
+     * 得到一个被拒绝的Promise
+     * @param {any}} reason
+     */
+    static reject (reason) {
+        return new MyPromise((resolve, reject) => {
+            reject(reason)
+        })
+    }
 }
+
 
 // 互操作1
 // const pro1 = new MyPromise((resolve, reject) => { 
@@ -229,17 +257,26 @@ class MyPromise {
 // }, 10)
 
 // finally验证
-const pro1 = new MyPromise((resolve, reject) => { 
-    resolve(1)
-})
-const pro2 = pro1.finally(d => {
-    console.log('finally', d); // 
-    return 2
-})
+// const pro1 = new MyPromise((resolve, reject) => { 
+//     resolve(1)
+// })
+// const pro2 = pro1.finally(d => {
+//     console.log('finally', d); // 
+//     return 2
+// })
 
-setTimeout(() => {
-    console.log(pro2);
-})
+// setTimeout(() => {
+//     console.log(pro2);
+// })
 // 输出
 // finally undefined
 // MyPromise { _state: 'fulfilled', _value: 1, _handlers: [] }
+
+// resolve和reject验证
+const pro1 = MyPromise.resolve(1)
+const pro2 = MyPromise.reject(2)
+console.log(pro1);
+console.log(pro2);
+// 输出
+// MyPromise { _state: 'fulfilled', _value: 1, _handlers: [] }
+// MyPromise { _state: 'rejected', _value: 2, _handlers: [] }
