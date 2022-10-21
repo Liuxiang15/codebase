@@ -344,3 +344,6 @@ MyPromise.all(proms1).then(data => {
 }, (reason) => { 
     console.log('失败', reason);
 })
+// 输出
+// 成功 [ 1, 2, 3 ]
+// 失败 2
