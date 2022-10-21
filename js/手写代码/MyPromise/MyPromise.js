@@ -160,21 +160,33 @@ class MyPromise {
 
 }
 
-// 互操作
-const pro1 = new MyPromise((resolve, reject) => { 
-    setTimeout(() => { 
-        resolve(1)
-    })
-})
+// 互操作1
+// const pro1 = new MyPromise((resolve, reject) => { 
+//     setTimeout(() => { 
+//         resolve(1)
+//     })
+// })
 
-pro1.then((data) => {
-    console.log(data);
-    return new Promise((resolve, reject) => {
-        resolve(2)
-    })
-}).then((data) => {
-    console.log(data);
-})
+// pro1.then((data) => {
+//     console.log(data);
+//     return new Promise((resolve, reject) => {
+//         resolve(2)
+//     })
+// }).then((data) => {
+//     console.log(data);
+// })
 // 输出
 // 1
 // 2
+
+// 互操作2
+function delay (duration) { 
+    return new MyPromise(resolve => {
+        setTimeout(resolve, duration)
+    })
+}
+(async function () { 
+    console.log('satrt');
+    await delay(1000)
+    console.log('end');
+})();
