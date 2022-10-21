@@ -215,15 +215,31 @@ class MyPromise {
 // end
 
 // catch验证
+// const pro1 = new MyPromise((resolve, reject) => { 
+//     setTimeout(() => { 
+//         reject(1)
+//     })
+// })
+// const pro2 = pro1.catch(reason => {
+//     console.log(reason); // 1
+//     console.log('pro1',pro1); // pro1 MyPromise { _state: 'rejected', _value: 1, _handlers: [] }
+// })
+// setTimeout(() => {
+//     console.log('pro2',pro2);
+// }, 10)
+
+// finally验证
 const pro1 = new MyPromise((resolve, reject) => { 
-    setTimeout(() => { 
-        reject(1)
-    })
+    resolve(1)
 })
-const pro2 = pro1.catch(reason => {
-    console.log(reason); // 1
-    console.log('pro1',pro1); // pro1 MyPromise { _state: 'rejected', _value: 1, _handlers: [] }
+const pro2 = pro1.finally(d => {
+    console.log('finally', d); // 
+    return 2
 })
+
 setTimeout(() => {
-    console.log('pro2',pro2);
-}, 10)
+    console.log(pro2);
+})
+// 输出
+// finally undefined
+// MyPromise { _state: 'fulfilled', _value: 1, _handlers: [] }
