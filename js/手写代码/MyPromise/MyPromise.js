@@ -48,6 +48,7 @@ class MyPromise {
             executor(this._resolve.bind(this), this._reject.bind(this))
         } catch (err) { 
             this._reject(err)
+            console.error(err);
         }
 
     }
@@ -108,6 +109,7 @@ class MyPromise {
                     resolve(res)
                 }
             } catch (err) {
+                console.error(err);
                 reject(err)
             }
 
@@ -205,6 +207,43 @@ class MyPromise {
             reject(reason)
         })
     }
+
+    /**
+     * 得到一个新的Promise
+     * 该Promise的状态取决于proms的执行
+     * proms是一个迭代器，包含多个Promise
+     * 全部Promise成功，则返回的Promise成功，数据为所有Promise成功的数据，并且顺序是按照传入的顺序排列
+     * 只要有一个Promise失败，则返回的Promise失败，原因是第一个失败的Promise的原因
+     * @param {iterator} proms
+     */
+    static all (proms) {
+        return new MyPromise((resolve, reject) => {
+            try { 
+                const results = [];
+                let count = 0;// Promise的总数
+                let fulfilledCount = 0;// 已完成的数量
+                for (const p of proms) {
+                    let i = count; // 记录当前下标
+                    count += 1;
+                    // 迭代器返回的结果不是Promise先resolve一下
+                    MyPromise.resolve(p).then((data => { 
+                        results[i] = data
+                        fulfilledCount += 1
+                        if (fulfilledCount === count) {// 当前是最后一个Promise完成了
+                            resolve(results)
+                        }
+                    }), reject)
+                }
+                if (count == 0) {
+                    resolve(results)
+                }
+            } catch (err) { // 处理传入的proms不是迭代器
+                reject(err)
+                console.error(err);
+            }
+            
+        })
+    }
 }
 
 
@@ -273,10 +312,35 @@ class MyPromise {
 // MyPromise { _state: 'fulfilled', _value: 1, _handlers: [] }
 
 // resolve和reject验证
-const pro1 = MyPromise.resolve(1)
-const pro2 = MyPromise.reject(2)
-console.log(pro1);
-console.log(pro2);
+// const pro1 = MyPromise.resolve(1)
+// const pro2 = MyPromise.reject(2)
+// console.log(pro1);
+// console.log(pro2);
 // 输出
 // MyPromise { _state: 'fulfilled', _value: 1, _handlers: [] }
 // MyPromise { _state: 'rejected', _value: 2, _handlers: [] }
+
+// all验证
+
+const pro1 = new MyPromise((resolve, reject) => { 
+    setTimeout(() => { 
+        resolve(2)
+    })
+})
+let proms0 = [MyPromise.resolve(1), pro1, MyPromise.resolve(3)]
+MyPromise.all(proms0).then(data => { 
+    console.log('成功', data);
+}, (reason) => { 
+    console.log('失败', reason);
+})
+const pro2 = new MyPromise((resolve, reject) => { 
+    setTimeout(() => { 
+        reject(2)
+    })
+})
+let proms1 = [MyPromise.resolve(1), pro2, MyPromise.resolve(3)]
+MyPromise.all(proms1).then(data => { 
+    console.log('成功', data);
+}, (reason) => { 
+    console.log('失败', reason);
+})
