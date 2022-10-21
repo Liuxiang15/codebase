@@ -102,7 +102,7 @@ class MyPromise {
             // 3、传的后续处理是函数
             try {
                 const res = executor(this._value)
-                if (isPromise) {
+                if (isPromise(res)) {
                     res.then(resolve, reject)
                 } else {
                     resolve(res)
@@ -125,6 +125,26 @@ class MyPromise {
             this._pushHandler(onFulfilled, FULFILLED, resolve, reject)
             this._pushHandler(onRejected, REJECTED, resolve, reject)
             this._runHandlers() // 执行队列
+        })
+    }
+    /**
+     * 仅处理失败的场景
+     * @param {Function} onRejected
+     */
+    catch (onRejected) {
+        return this.then(null, onRejected)
+    }
+    /**
+     * 无论成功
+     * @param {*} onSettled 
+     */
+    finally (onSettled) { 
+        return this.then((data) => { 
+            onSettled() // 注意finally获取不到参数
+            return data
+        }, reason => {
+            onSettled()
+            throw reason
         })
     }
     /**
@@ -167,12 +187,12 @@ class MyPromise {
 //     })
 // })
 
-// pro1.then((data) => {
-//     console.log(data);
+// pro1.then((data) => { 
+//     console.log(data); // 执行顺序第0
 //     return new Promise((resolve, reject) => {
-//         resolve(2)
+//         resolve(2)   // 执行顺序第1
 //     })
-// }).then((data) => {
+// }).then((data) => { // 执行顺序第2
 //     console.log(data);
 // })
 // 输出
@@ -180,16 +200,30 @@ class MyPromise {
 // 2
 
 // 互操作2
-function delay (duration) { 
-    return new MyPromise(resolve => {
-        setTimeout(resolve, duration)
-    })
-}
-(async function () { 
-    console.log('start');
-    await delay(1000)
-    console.log('end');
-})();
+// function delay (duration) { 
+//     return new MyPromise(resolve => {
+//         setTimeout(resolve, duration)
+//     })
+// }
+// (async function () { 
+//     console.log('start');
+//     await delay(1000)
+//     console.log('end');
+// })();
 // 输出
 // start
 // end
+
+// catch验证
+const pro1 = new MyPromise((resolve, reject) => { 
+    setTimeout(() => { 
+        reject(1)
+    })
+})
+const pro2 = pro1.catch(reason => {
+    console.log(reason); // 1
+    console.log('pro1',pro1); // pro1 MyPromise { _state: 'rejected', _value: 1, _handlers: [] }
+})
+setTimeout(() => {
+    console.log('pro2',pro2);
+}, 10)
