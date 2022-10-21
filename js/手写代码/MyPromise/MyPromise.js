@@ -26,6 +26,15 @@ function runMicroTask (callback) {
     }
     
 }
+/**
+ * 判断obj是否满足Promise A+规范
+ * @param {*} obj 
+ * @returns {Boolean}
+ */
+function isPromise (obj) {
+    // 不用obj instanceOf Promsie
+    return !!(obj && typeof obj === 'object' && typeof obj.then === 'function')
+}
 class MyPromise { 
     /**
      * 创建一个Promise
@@ -62,8 +71,8 @@ class MyPromise {
             // 目前任务仍在挂起
             return
         }
-        console.log(`处理${this._handlers.length}个函数`);
-        console.log(this._handlers);
+        // console.log(`处理${this._handlers.length}个函数`);
+        // console.log(this._handlers);
         while (this._handlers[0]) {
             const handler = this._handlers[0]
             this._runOneHandler(handler)
@@ -73,8 +82,37 @@ class MyPromise {
     /**
      * 处理一个handler
      */
-    _runOneHandler (handler) {
-         
+        /**
+     * 处理一个handler
+     * @param {Object} handler
+     */
+    _runOneHandler ({ executor,state, resolve, reject }) {
+        runMicroTask(() => {
+            // 1、状态不一致，不处理
+            if (this._state !== state) {
+                return
+            }
+            // 2、传的后续处理不是函数,状态穿透(难点)
+            if (typeof executor !== 'function') {
+                this._state === FULFILLED
+                    ? resolve(this._value)
+                    : reject(this._value)
+                return
+            }
+            // 3、传的后续处理是函数
+            try {
+                const res = executor(this._value)
+                if (isPromise) {
+                    res.then(resolve, reject)
+                } else {
+                    resolve(res)
+                }
+            } catch (err) {
+                reject(err)
+            }
+
+        })
+        
     }
 
     /**
@@ -122,14 +160,21 @@ class MyPromise {
 
 }
 
-
-const pro = new MyPromise((resolve, reject) => { 
+// 互操作
+const pro1 = new MyPromise((resolve, reject) => { 
     setTimeout(() => { 
         resolve(1)
     })
 })
 
-pro.then(function A1 () { })
-setTimeout(() => {
-    pro.then(function B1 () { })
+pro1.then((data) => {
+    console.log(data);
+    return new Promise((resolve, reject) => {
+        resolve(2)
+    })
+}).then((data) => {
+    console.log(data);
 })
+// 输出
+// 1
+// 2
