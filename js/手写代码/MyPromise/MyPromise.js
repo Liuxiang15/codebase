@@ -186,7 +186,10 @@ function delay (duration) {
     })
 }
 (async function () { 
-    console.log('satrt');
+    console.log('start');
     await delay(1000)
     console.log('end');
 })();
+// 输出
+// start
+// end
