@@ -244,6 +244,31 @@ class MyPromise {
             
         })
     }
+
+    /**
+     * 等待所有的Promise有结果之后
+     * 该方法返回的Promise完成
+     * 并且按照顺序将所有结果汇总
+     * @param {iterator} proms
+     */
+    static allSettled (proms) {
+        const ps = []
+        for (const p of proms) {
+            ps.push(
+                p.then(
+                    value => ({
+                        status: FULFILLED, 
+                        value:value
+                    }),
+                    reason => ({
+                        status: REJECTED,
+                        reason:reason
+                    })
+                )
+            )
+        }
+        return MyPromise.all(ps)
+    }
 }
 
 
@@ -322,28 +347,59 @@ class MyPromise {
 
 // all验证
 
-const pro1 = new MyPromise((resolve, reject) => { 
-    setTimeout(() => { 
-        resolve(2)
-    })
-})
-let proms0 = [MyPromise.resolve(1), pro1, MyPromise.resolve(3)]
-MyPromise.all(proms0).then(data => { 
-    console.log('成功', data);
-}, (reason) => { 
-    console.log('失败', reason);
-})
-const pro2 = new MyPromise((resolve, reject) => { 
-    setTimeout(() => { 
-        reject(2)
-    })
-})
-let proms1 = [MyPromise.resolve(1), pro2, MyPromise.resolve(3)]
-MyPromise.all(proms1).then(data => { 
-    console.log('成功', data);
-}, (reason) => { 
-    console.log('失败', reason);
-})
+// const pro1 = new MyPromise((resolve, reject) => { 
+//     setTimeout(() => { 
+//         resolve(2)
+//     })
+// })
+// let proms0 = [MyPromise.resolve(1), pro1, MyPromise.resolve(3)]
+// MyPromise.all(proms0).then(data => { 
+//     console.log('成功', data);
+// }, (reason) => { 
+//     console.log('失败', reason);
+// })
+// const pro2 = new MyPromise((resolve, reject) => { 
+//     setTimeout(() => { 
+//         reject(2)
+//     })
+// })
+// let proms1 = [MyPromise.resolve(1), pro2, MyPromise.resolve(3)]
+// MyPromise.all(proms1).then(data => { 
+//     console.log('成功', data);
+// }, (reason) => { 
+//     console.log('失败', reason);
+// })
 // 输出
 // 成功 [ 1, 2, 3 ]
 // 失败 2
+
+// allSettled验证
+const p1 = new MyPromise((resolve, reject) => {
+    setTimeout(() => {
+        reject(1)
+    })
+})
+
+
+
+const pro = MyPromise.allSettled([p1, MyPromise.resolve(2), MyPromise.resolve(3)])
+pro.then(res => {
+    console.log(res);
+})
+// 输出
+// [
+//   { status: 'rejected', reason: 1 },
+//   { status: 'fulfilled', value: 2 },
+//   { status: 'fulfilled', value: 3 }
+// ]
+
+const pro2 = Promise.allSettled([p1, Promise.resolve(2), Promise.resolve(3)])
+pro.then(res => {
+    console.log(res);
+})
+// 输出
+// [
+//   { status: 'rejected', reason: 1 },
+//   { status: 'fulfilled', value: 2 },
+//   { status: 'fulfilled', value: 3 }
+// ]
