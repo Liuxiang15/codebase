@@ -269,6 +269,52 @@ class MyPromise {
         }
         return MyPromise.all(ps)
     }
+        /**
+     * 等待所有的Promise有结果之后
+     * 该方法返回的Promise完成
+     * 并且按照顺序将所有结果汇总
+     * @param {iterator} proms
+     */
+    static allSettled2 (proms) {
+        return new MyPromise((resolve, reject) => {
+            try { 
+                const results = [];
+                let count = 0;// Promise的总数
+                let fulfilledCount = 0;// 已完成的数量
+                for (const p of proms) {
+                    let i = count; // 记录当前下标
+                    count += 1;
+                    // 迭代器返回的结果不是Promise先resolve一下
+                    MyPromise.resolve(p).then((data => {
+                        results[i] = {
+                            status: FULFILLED,
+                            value: data
+                        }
+                        fulfilledCount += 1
+                        if (fulfilledCount === count) {// 当前是最后一个Promise完成了
+                            resolve(results)
+                        }
+                    }), (reason) => {
+                        results[i] = {
+                            status: REJECTED,
+                            reason
+                        }
+                        fulfilledCount += 1
+                        if (fulfilledCount === count) {// 当前是最后一个Promise完成了
+                            resolve(results)
+                        }
+                    })
+                }
+                if (count == 0) {
+                    resolve(results)
+                }
+            } catch (err) { // 处理传入的proms不是迭代器
+                reject(err)
+                console.error(err);
+            }
+            
+        })
+    }
 }
 
 
@@ -392,9 +438,19 @@ pro.then(res => {
 //   { status: 'fulfilled', value: 2 },
 //   { status: 'fulfilled', value: 3 }
 // ]
+const pro1 = MyPromise.allSettled([p1, MyPromise.resolve(2), MyPromise.resolve(3)])
+pro1.then(res => {
+    console.log(res);
+})
+// 输出
+// [
+//   { status: 'rejected', reason: 1 },
+//   { status: 'fulfilled', value: 2 },
+//   { status: 'fulfilled', value: 3 }
+// ]
 
 const pro2 = Promise.allSettled([p1, Promise.resolve(2), Promise.resolve(3)])
-pro.then(res => {
+pro2.then(res => {
     console.log(res);
 })
 // 输出
