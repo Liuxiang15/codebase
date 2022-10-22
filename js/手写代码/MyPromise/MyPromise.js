@@ -331,6 +331,42 @@ class MyPromise {
             }
         })
     }
+
+
+    /**
+     * 得到一个新的Promise
+     * 一旦可迭代对象内的任意一个 promise 变成了兑现状态，那么由该方法所返回的 promise 就会变成兑现状态，并且它的兑现值就是可迭代对象内的首先兑现的 promise 的兑现值。
+     * 如果可迭代对象内的 promise 最终都没有兑现（即所有 promise 都被拒绝了），那么该方法所返回的 promise 就会变成拒绝状态，并且它的拒因会是一个 AggregateError 实例，这是 Error 的子类，用于把单一的错误集合在一起。
+     * 警告： Promise.any() 方法依然是实验性的，尚未被所有的浏览器完全支持。它当前处于 TC39 第四阶段草案（Stage 4）
+     * @param {iterator} proms 由 Promise 所组成的可迭代对象
+     * @return 一个新的 promise
+     */
+    static any (proms) {
+        return new MyPromise((resolve, reject) => {
+            try { 
+                let count = 0;// Promise的总数
+                let fulfilledCount = 0;// 已完成的数量
+                for (const p of proms) {
+                    // 迭代器返回的结果不是Promise先resolve一下
+                    MyPromise.resolve(p).then((data => { 
+                        resolve(data)
+                    }), (err) => { 
+                        fulfilledCount += 1
+                        if (fulfilledCount === count) {// 当前是最后一个Promise完成了
+                            reject("迭代对象中的所有 promise 都被拒绝")
+                        }
+                    })
+                }
+                if (count == 0) {
+                    reject("空的可迭代对象")
+                }
+            } catch (err) { // 处理传入的proms不是迭代器
+                reject(err)
+                console.error(err);
+            }
+            
+        })
+    }
 }
 
 
@@ -477,21 +513,37 @@ class MyPromise {
 // ]
 
 // race验证
-const p1 = new MyPromise((resolve, reject) => {
-    setTimeout(() => {
-        reject(1)
-    }, 100)
-})
-const p2 = new MyPromise((resolve, reject) => {
-    setTimeout(() => {
-        resolve(2)
-    },10)
-})
-const pro = MyPromise.race([p1, p2])
-pro.then(data => { 
-    console.log('成功', data);
-}, reason => { 
-    console.log('失败', reason);
-})
+// const p1 = new MyPromise((resolve, reject) => {
+//     setTimeout(() => {
+//         reject(1)
+//     }, 100)
+// })
+// const p2 = new MyPromise((resolve, reject) => {
+//     setTimeout(() => {
+//         resolve(2)
+//     },10)
+// })
+// const pro = MyPromise.race([p1, p2])
+// pro.then(data => { 
+//     console.log('成功', data);
+// }, reason => { 
+//     console.log('失败', reason);
+// })
 // 输出
 // 成功 2
+
+// any验证
+// 如果传入了一个空的可迭代对象，那么就会返回一个已经被拒的 promise
+MyPromise.any([]).then(res => {
+    console.log('成功', res);
+}, reason => { console.log('失败', reason); })
+
+// 如果传入了一个不含有 promise 的可迭代对象，那么就会返回一个异步兑现的 promise
+MyPromise.any([MyPromise.resolve(1), MyPromise.reject(2), 3]).then(res => {
+    console.log('成功', res);
+}, reason => { console.log('失败', reason); })
+
+// 如果可迭代对象中的所有 promise 都被拒绝了，那么这个处于等待状态的 promise 就会异步地切换至被拒状态
+MyPromise.any([MyPromise.reject(1), MyPromise.reject(2)]).then(res => {
+    console.log('成功', res);
+}, reason=> {console.log('失败',reason);})
