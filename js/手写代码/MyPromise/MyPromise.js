@@ -315,6 +315,22 @@ class MyPromise {
             
         })
     }
+
+    /**
+     * race 函数返回一个 Promise，它将与第一个传递的 promise 相同的完成方式被完成。
+
+     如果传的迭代是空的，则返回的 promise 将永远等待。
+
+     如果迭代包含一个或多个非承诺值和/或已解决/拒绝的承诺，则 Promise.race 将解析为迭代中找到的第一个值。
+     * @param {iterator} proms
+     */
+    static race (proms) {
+        return new MyPromise((resolve, reject) => { 
+            for (const p of proms) {
+                MyPromise.resolve(p).then(resolve, reject)
+            }
+        })
+    }
 }
 
 
@@ -420,42 +436,62 @@ class MyPromise {
 // 失败 2
 
 // allSettled验证
+// const p1 = new MyPromise((resolve, reject) => {
+//     setTimeout(() => {
+//         reject(1)
+//     })
+// })
+
+
+
+// const pro = MyPromise.allSettled([p1, MyPromise.resolve(2), MyPromise.resolve(3)])
+// pro.then(res => {
+//     console.log(res);
+// })
+// 输出
+// [
+//   { status: 'rejected', reason: 1 },
+//   { status: 'fulfilled', value: 2 },
+//   { status: 'fulfilled', value: 3 }
+// ]
+// const pro1 = MyPromise.allSettled([p1, MyPromise.resolve(2), MyPromise.resolve(3)])
+// pro1.then(res => {
+//     console.log(res);
+// })
+// 输出
+// [
+//   { status: 'rejected', reason: 1 },
+//   { status: 'fulfilled', value: 2 },
+//   { status: 'fulfilled', value: 3 }
+// ]
+
+// const pro2 = Promise.allSettled([p1, Promise.resolve(2), Promise.resolve(3)])
+// pro2.then(res => {
+//     console.log(res);
+// })
+// 输出
+// [
+//   { status: 'rejected', reason: 1 },
+//   { status: 'fulfilled', value: 2 },
+//   { status: 'fulfilled', value: 3 }
+// ]
+
+// race验证
 const p1 = new MyPromise((resolve, reject) => {
     setTimeout(() => {
         reject(1)
-    })
+    }, 100)
 })
-
-
-
-const pro = MyPromise.allSettled([p1, MyPromise.resolve(2), MyPromise.resolve(3)])
-pro.then(res => {
-    console.log(res);
+const p2 = new MyPromise((resolve, reject) => {
+    setTimeout(() => {
+        resolve(2)
+    },10)
 })
-// 输出
-// [
-//   { status: 'rejected', reason: 1 },
-//   { status: 'fulfilled', value: 2 },
-//   { status: 'fulfilled', value: 3 }
-// ]
-const pro1 = MyPromise.allSettled([p1, MyPromise.resolve(2), MyPromise.resolve(3)])
-pro1.then(res => {
-    console.log(res);
+const pro = MyPromise.race([p1, p2])
+pro.then(data => { 
+    console.log('成功', data);
+}, reason => { 
+    console.log('失败', reason);
 })
 // 输出
-// [
-//   { status: 'rejected', reason: 1 },
-//   { status: 'fulfilled', value: 2 },
-//   { status: 'fulfilled', value: 3 }
-// ]
-
-const pro2 = Promise.allSettled([p1, Promise.resolve(2), Promise.resolve(3)])
-pro2.then(res => {
-    console.log(res);
-})
-// 输出
-// [
-//   { status: 'rejected', reason: 1 },
-//   { status: 'fulfilled', value: 2 },
-//   { status: 'fulfilled', value: 3 }
-// ]
+// 成功 2
