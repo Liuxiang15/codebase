@@ -546,4 +546,8 @@ MyPromise.any([MyPromise.resolve(1), MyPromise.reject(2), 3]).then(res => {
 // 如果可迭代对象中的所有 promise 都被拒绝了，那么这个处于等待状态的 promise 就会异步地切换至被拒状态
 MyPromise.any([MyPromise.reject(1), MyPromise.reject(2)]).then(res => {
     console.log('成功', res);
-}, reason=> {console.log('失败',reason);})
+}, reason => { console.log('失败', reason); })
+// 输出
+// 失败 空的可迭代对象
+// 成功 1
+// 失败 迭代对象中的所有 promise 都被拒绝
