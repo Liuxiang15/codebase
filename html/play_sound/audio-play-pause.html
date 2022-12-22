@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <!-- http://t.zoukankan.com/it-tsz-p-13946737.html -->
+    <audio id="audio">
+        <source src="https://xesfile.xesimg.com/programme/ai/tts/wav/b8a3d59ae5b71a2657dbc11f7a34f6b1.wav" type="audio/mp3">
+</audio>
+    <button id="start" onclick="start()">
+        start
+    </button>
+    <button id="restart" onclick="restart()">
+        restart
+    </button>
+    <button id="pause" onclick="pause()">
+        pause
+    </button>
+    <button id="stop" onclick="stop()">
+        stop
+    </button>
+    <script>
+        const audioDom = document.getElementById('audio')
+        
+        start.onclick = function(e){
+            start()
+        }
+        function start(){
+            console.log('start');
+            //播放(继续播放)
+            audioDom.play();
+        }
+        function restart () {
+            //播放(继续播放)
+            audioDom.play();
+        }
+        function pause () {
+            //暂停
+            audioDom.pause();
+        }
+        function stop () {
+            //停止
+            audioDom.pause();
+            audioDom.currentTime = 0;
+        }
+    </script>
+</body>
+</html>
