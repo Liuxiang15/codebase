@@ -1,0 +1,43 @@
+<div id="app">
+  <!-- 插值 -->
+  <p>{{counter}}</p>
+  <!-- 指令 -->
+  <p k-text="counter" @click="handleCounterClick"></p>
+  <p k-html="desc"></p>
+  <!-- 事件 -->
+  <button @click="addCounter">addCounter</button>
+  <button @click="addArr">数组增加元素</button>
+  <!-- k-model -->
+  <p>
+    <input type="text" k-model="desc" />
+  </p>
+  
+</div>
+<script src="./kvue.js"></script>
+<script>
+  // 1.数据驱动：数据响应式
+  // 2.编译：得到渲染函数
+  const app = new KVue({
+    el: '#app',
+    data: {
+      counter: 1,
+      desc: '<span style="color: red">村长好帅</span>',
+      arr:[]
+    },
+  //  新增测试方法
+    methods:{
+      handleCounterClick(){
+        console.log("点击了count", this.counter)
+      },
+      addArr (){
+        this.arr.push(this.counter)
+      },
+      addCounter(){
+        this.counter ++
+      }
+    }
+  })
+  // setInterval(() => {
+  //   app.counter++
+  // }, 1000);
+</script>
