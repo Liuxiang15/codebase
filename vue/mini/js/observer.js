@@ -4,8 +4,8 @@
  * 新增：在 obsever.js 中使用Dep
  */
 
-class Observer { 
-    constructor(data) { 
+class Observer {
+    constructor(data) {
         // 遍历data
         this.walk(data)
     }
@@ -13,10 +13,10 @@ class Observer {
      * 遍历data转为响应式
      * @param {*} data 
      */
-    walk (data) { 
+    walk(data) {
         // 空和基本类型
         if (!data || typeof data !== 'object') return
-        Object.keys(data).forEach(key => { 
+        Object.keys(data).forEach(key => {
             this.defineReactive(data, key, data[key])
         })
     }
@@ -29,7 +29,7 @@ class Observer {
      * @param {*} key 
      * @param {*} value 
      */
-    defineReactive (obj, key, value) { 
+    defineReactive(obj, key, value) {
         // 如果是对象类型的 也调用walk 变成响应式，不是对象类型的直接在walk会被return
         this.walk(value)
         // 保存this
@@ -39,13 +39,13 @@ class Observer {
         Object.defineProperty(obj, key, {
             enumerable: true,
             configurable: true,
-            get () { 
+            get() {
                 // 添加观察者对象 Dep.target 表示观察者
                 // Dep.target其实是watcher
                 Dep.target && dep.addObs(Dep.target)
                 return value
             },
-            set (newValue) {
+            set(newValue) {
                 if (newValue === value) return
                 value = newValue
                 // 赋值的话如果是newValue是对象，对象里面的属性也应该设置为响应式的
