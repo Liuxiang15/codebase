@@ -41,8 +41,7 @@ class Observer {
             configurable: true,
             get() {
                 // 添加观察者对象 Dep.target 表示观察者
-                // Dep.target其实是watcher
-                Dep.target && dep.addObs(Dep.target)
+                dep.depend()
                 return val
             },
             set(newVal) {
