@@ -11,7 +11,7 @@
   <p>
     <input type="text" k-model="desc" />
   </p>
-  
+
 </div>
 <script src="./kvue.js"></script>
 <script>
@@ -22,18 +22,18 @@
     data: {
       counter: 1,
       desc: '<span style="color: red">村长好帅</span>',
-      arr:[]
+      arr: []
     },
-  //  新增测试方法
-    methods:{
-      handleCounterClick(){
+    //  新增测试方法
+    methods: {
+      handleCounterClick() {
         console.log("点击了count", this.counter)
       },
-      addArr (){
+      addArr() {
         this.arr.push(this.counter)
       },
-      addCounter(){
-        this.counter ++
+      addCounter() {
+        this.counter++
       }
     }
   })
