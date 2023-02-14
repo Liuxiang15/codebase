@@ -25,31 +25,31 @@ class Observer {
      * 要注意的 和vue.js 写的不同的是
      * vue.js中是将 属性给了 Vue 转为 getter setter
      * 这里是 将data中的属性转为getter setter
-     * @param {*} obj 
+     * @param {*} data 
      * @param {*} key 
-     * @param {*} value 
+     * @param {*} val 
      */
-    defineReactive(obj, key, value) {
+    defineReactive(data, key, val) {
         // 如果是对象类型的 也调用walk 变成响应式，不是对象类型的直接在walk会被return
-        this.walk(value)
+        this.walk(val)
         // 保存this
         const self = this
         // 创建Dep对象
         let dep = new Dep()
-        Object.defineProperty(obj, key, {
+        Object.defineProperty(data, key, {
             enumerable: true,
             configurable: true,
             get() {
                 // 添加观察者对象 Dep.target 表示观察者
                 // Dep.target其实是watcher
                 Dep.target && dep.addObs(Dep.target)
-                return value
+                return val
             },
-            set(newValue) {
-                if (newValue === value) return
-                value = newValue
-                // 赋值的话如果是newValue是对象，对象里面的属性也应该设置为响应式的
-                self.walk(newValue)
+            set(newVal) {
+                if (newVal === val) return
+                val = newVal
+                // 赋值的话如果是newVal是对象，对象里面的属性也应该设置为响应式的
+                self.walk(newVal)
                 // 触发通知 更新视图
                 dep.notify()
             }
