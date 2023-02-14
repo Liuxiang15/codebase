@@ -1,17 +1,20 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
 </head>
+
 <body>
     <div id="app">
         {{msg}}<br />
         {{age}}<br />
         <div v-text="msg"></div>
-        <input v-model="msg" type="text">
+        <input v-model="desc" type="text">
+        <p v-html="desc"></p>
     </div>
     <script src="./js/dep.js"></script>
     <script src="./js/watcher.js"></script>
@@ -23,7 +26,8 @@
             el: '#app',
             data: {
                 msg: '123',
-                age: 18
+                age: 18,
+                desc: '<span style="color: red">飞人好帅</span>',
             }
         })
         console.log(vm)

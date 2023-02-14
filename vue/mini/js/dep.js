@@ -13,38 +13,60 @@
 // 目标
 class Dep {
     constructor() {
-        this._observeLists = []
+        this.subs = []
     }
     // 添加观察者
-    addObs (obs) {
-        if (obs && obs.update) {
+    addSub(sub) {
+        if (sub && sub.update) {
             // 添加到观察者列表中
-            this._observeLists.push(obs)
+            this.subs.push(sub)
+        }
+    }
+    removeSub() {
+        remove(this.subs, sub)
+    }
+    depend() {
+        // Dep.target其实是watcher
+        if (Dep.target) {
+            this.addSub(Dep.target)
         }
     }
     // 通知观察者
-    notify () {
-        this._observeLists.forEach(obs => {
-            // 每个观察者受到通知后 更新事件
-            obs.update()
-        })
+    notify() {
+        const subs = this.subs.slice()
+        for (let i = 0; i < subs.length; i++) {
+            subs[i].update()
+        }
+        // this.subs.forEach(sub => {
+        //     // 每个观察者受到通知后 更新事件
+        //     sub.update()
+        // })
     }
     // 清空观察者-可能用不到
-    empty () {
-        this._observeLists = []
+    // empty() {
+    //     this.subs = []
+    // }
+}
+
+function remove(arr, item) {
+    if (arr.length) {
+        const index = arr.indexOf(item)
+        if (index > -1) {
+            return arr.splice(index, 1)
+        }
     }
 }
 
-        // class Observer {
-        //     // 定义观察者内容更新事件
-        //     update () {
-        //         console.log('目标更新了')
-        //     }
-        // }
-        // 测试
-        // let sub = new Dep()
-        // let obs1 = new Observer(),
-        //     obs2 = new Observer()
-        // sub.addObs(obs1)
-        // sub.addObs(obs2)
-        // sub.notify()
+// class Suberver {
+//     // 定义观察者内容更新事件
+//     update () {
+//         console.log('目标更新了')
+//     }
+// }
+// 测试
+// let sub = new Dep()
+// let sub1 = new Suberver(),
+//     sub2 = new Suberver()
+// sub.addSub(sub1)
+// sub.addSub(sub2)
+// sub.notify()
