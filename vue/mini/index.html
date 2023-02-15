@@ -12,6 +12,7 @@
     <div id="app">
         {{msg}}<br />
         {{age}}<br />
+        <p>爱好：{{info.hobby}}</p>
         <div v-text="msg"></div>
         <input v-model="desc" type="text">
         <p v-html="desc"></p>
@@ -28,6 +29,9 @@
                 msg: '123',
                 age: 18,
                 desc: '<span style="color: red">飞人好帅</span>',
+                info: {
+                    hobby: 'coding'
+                }
             }
         })
         console.log(vm)
