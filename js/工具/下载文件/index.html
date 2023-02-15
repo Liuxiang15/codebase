@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <p>
+        <span>参考链接</span>
+        <a target="_blank" href="https://mp.weixin.qq.com/s/3nCEeiFD9PVBheT_Wik6wQ">前端文件下载的正确打开方式
+        </a>
+    </p>
+    <div>
+        <a href="https://livefile.xesimg.com/programme/ai/images/generate/f92fea86746957f608c5c151d78ec986.jpg" target="_blank"
+            download="f92fea86746957f608c5c151d78ec986.jpg">方法1:a标签下载html</a>
+        <button id="btn1">法1:js创建a标签下载</button>
+    </div>
+    <div>
+        <button id="btn2">法2:window.open</button>
+    </div>
+    <div>
+        <button id="btn5">法5:XMLHttpRequest</button>
+    </div>
+    <div>
+        6. 总结
+        上面的方案这么多，其实最终还是落到a标签上，所以不管是通过浏览器的内置行为进行下载，还是通过ajax进行下载，文件下载的最终还是浏览器的行为
+    </div>
+    <script>
+        const fileUrl = "https://livefile.xesimg.com/programme/ai/images/generate/f92fea86746957f608c5c151d78ec986.jpg"
+        const fileName = "测试下载.jpg"
+        btn1.onclick = function () {
+            const a = document.createElement('a')
+            a.href = fileUrl
+            a.download = 'baidu.html'
+            a.click()
+        }
+        btn2.onclick = function () {
+            window.open('http://www.baidu.com', '_blank', 'download=baidu.html')
+        }
+        btn5.onclick = function () {
+            const xhr = new XMLHttpRequest()
+            xhr.open('GET', fileUrl)
+            xhr.send()
+
+            xhr.onload = function () {
+                const blob = new Blob([xhr.response], { type: 'text/html' })
+                downloadBlob(fileName, blob)
+                // const a = document.createElement('a')
+                // a.href = URL.createObjectURL(blob)
+                // a.download = fileUrl
+                // a.click()
+            }
+        }
+        const downloadBlob = (filename, blob) => {
+            // Use special ms version if available to get it working on Edge.
+            if (navigator.msSaveOrOpenBlob) {
+                navigator.msSaveOrOpenBlob(blob, filename)
+                return
+            }
+            const downloadLink = document.createElement('a')
+            document.body.appendChild(downloadLink)
+
+            const url = window.URL.createObjectURL(blob)
+            downloadLink.href = url
+            downloadLink.download = filename
+            downloadLink.click()
+            window.URL.revokeObjectURL(url)
+            document.body.removeChild(downloadLink)
+        }
+
+    </script>
+
+
+</body>
+
+</html>
