@@ -148,7 +148,7 @@ class KVue {
     // 0.保存选项
     this.$options = options;
     this.$data = options.data;
-    this.$methods = options.methods
+    this.$methods = options.methods || {}
 
     // 1.响应式: 递归遍历data中的对象，做响应式处理
     observe(this.$data);
@@ -157,7 +157,29 @@ class KVue {
     proxy(this);
 
     // 2.编译模板
-    new Compile(options.el, this);
+    // new Compile(options.el, this);
+    if (options.el) {
+      this.$mount(options.el);
+    }
+
+    
+  }
+  $mount(el){ 
+    // 1、获取宿主
+    this.$el = document.querySelector(el)
+    // 2、实现更新函数
+    const updateComponent = () => {
+      // dom版本
+      // 执行render，获取视图结构
+      const el = this.$options.render.call(this) 
+      const parent = this.$el.parentElement;
+      parent.insertBefore(el, this.$el.nextSibling)
+      parent.removeChild(this.$el)
+      this.$el = el
+    }
+    // 3.创建Watcher实例
+    updateComponent()
+
   }
 }
 
