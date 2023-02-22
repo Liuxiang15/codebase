@@ -1,4 +1,22 @@
 /**
+ * 解析简单路径
+ */
+ const bailRE = /[^\w.$]/
+
+ function parsePath(path) {
+     if (bailRE.test(path)) {
+         return
+     }
+     const segments = path.split('.')
+     return function (obj) {
+         for (let i = 0; i < segments.length; i++) {
+             if (!obj) return
+             obj = obj[segments[i]]
+         }
+         return obj
+     }
+ }
+/**
  * compiler.js
  * 实现对文本节点 和 元素节点指令编译
  * feat:在编译完文本节点后 在这里添加一个 Watcher
