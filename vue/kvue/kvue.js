@@ -178,7 +178,8 @@ class KVue {
       this.$el = el
     }
     // 3.创建Watcher实例
-    updateComponent()
+    // updateComponent()
+    new Watcher(this, updateComponent)
 
   }
 }
@@ -323,21 +324,23 @@ class Compile {
 
 // 负责具体节点更新
 class Watcher {
-  constructor(vm, key, updater) {
+  constructor(vm, fn) {
     this.vm = vm;
-    this.key = key;
-    this.updater = updater;
+    this.getter = fn
+    this.get()
 
+  }
+
+  get () {
     // 读当前值，触发依赖收集
     Dep.target = this
-    this.vm[this.key]
+    this.getter.call(this.vm)
     Dep.target = null
   }
 
   // Dep将来会调用update
   update () {
-    const val = this.vm[this.key];
-    this.updater.call(this.vm, val);
+    this.get()
   }
 }
 
