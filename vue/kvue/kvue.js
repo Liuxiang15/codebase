@@ -171,16 +171,79 @@ class KVue {
     const updateComponent = () => {
       // dom版本
       // 执行render，获取视图结构
-      const el = this.$options.render.call(this) 
-      const parent = this.$el.parentElement;
-      parent.insertBefore(el, this.$el.nextSibling)
-      parent.removeChild(this.$el)
-      this.$el = el
+      // const el = this.$options.render.call(this)
+      // const parent = this.$el.parentElement;
+      // parent.insertBefore(el, this.$el.nextSibling)
+      // parent.removeChild(this.$el)
+      // this.$el = el
+      
+      // vnode版
+      const vnode = this.$options.render.call(this, this.$createElement);
+      this._update(vnode);
     }
     // 3.创建Watcher实例
     // updateComponent()
     new Watcher(this, updateComponent)
 
+  }
+  /**
+   * 简易版
+   * @param {*} tag 标签
+   * @param {*} data  属性对象
+   * @param {*} children 子元素
+   * @returns 
+   */
+  $createElement(tag, data, children) {
+    return { tag, data, children };
+  }
+
+  _update(vnode) {
+    // 获取上次vnode，从而决定走初始化还是更新
+    const prevVnode = this._vnode;
+    if (!prevVnode) {
+      // init
+      this.__patch__(this.$el, vnode);
+    } else {
+      // update
+      this.__patch__(prevVnode, vnode);
+    }
+  }
+
+  /**
+   * 将vnode -> dom
+   * @param {*} oldVnode 
+   * @param {*} vnode 
+   */
+  __patch__(oldVnode, vnode){
+    // 首次进来oldVnode是dom
+    if (oldVnode.nodeType) { 
+      // init
+      // 递归创建
+      const el = this.createElm(vnode);
+      const parent = oldVnode.parentElement;
+      const refElm = oldVnode.nextSibling;
+      parent.insertBefore(el, refElm);
+      parent.removeChild(oldVnode);
+    }
+    this._vnode = vnode;
+  } 
+
+  /**
+   * 递归创建整棵dom树
+   * @returns {Element} el
+   */
+  createElm (vnode) { 
+    const el = document.createElement(vnode.tag)
+    // prop
+    // children
+
+    if (vnode.children) {
+      if (typeof vnode.children === "string") {
+        el.textContent = vnode.children
+      }
+    }
+    vnode.el = el // for update
+    return el
   }
 }
 
