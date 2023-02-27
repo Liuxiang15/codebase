@@ -224,6 +224,37 @@ class KVue {
       const refElm = oldVnode.nextSibling;
       parent.insertBefore(el, refElm);
       parent.removeChild(oldVnode);
+    } else {
+      // update 
+      const el = (vnode.el = oldVnode.el); // 先保存真实dom
+      if (oldVnode.tag === vnode.tag) {
+        // 判断双方子元素情况
+        const oldCh = oldVnode.children;
+        const newCh = vnode.children;
+        if (typeof newCh === "string") {
+          if (typeof oldCh === "string") {
+            // text update
+            if (newCh !== oldCh) {
+              el.textContent = newCh;
+            } else {
+              // elements replace with text
+              el.textContent = newCh;
+            }
+          }
+        }
+        else {
+          if (typeof oldCh === "string") {
+              // text replace with elmenets
+              el.innerHTML = "";
+              newCh.forEach((child) => el.appendChild(this.createElm(child)));
+          } else {
+            // 前后vnode都是列表需要进行双端比较
+              this.updateChildren(el, oldCh, newCh);
+            }
+        }
+      } else {
+        // replace
+      }
     }
     this._vnode = vnode;
   } 
@@ -233,25 +264,48 @@ class KVue {
    * @returns {Element} el
    */
     createElm(vnode) { 
-    const el = document.createElement(vnode.tag)
-    // prop
-    // children
+      const el = document.createElement(vnode.tag)
+      // prop
+      // children
 
-    if (vnode.children) {
-      if (typeof vnode.children === "string") {
-        // 子元素是字符串
-        el.textContent = vnode.children
-      } else {
-        // 数组
-        vnode.children.forEach(v => {
-          el.appendChild(this.createElm(v))
+      if (vnode.children) {
+        if (typeof vnode.children === "string") {
+          // 子元素是字符串
+          el.textContent = vnode.children
+        } else {
+          // 数组
+          vnode.children.forEach(v => {
+            el.appendChild(this.createElm(v))
 
-        })
+          })
+        }
       }
+      vnode.el = el // for update
+      return el
     }
-    vnode.el = el // for update
-    return el
+  
+  updateChildren(parentElm, oldCh, newCh) {
+    // 这⾥暂且直接patch对应索引的两个节点
+    const len = Math.min(oldCh.length, newCh.length);
+    for (let i = 0; i < len; i++) {
+      this.__patch__(oldCh[i], newCh[i]);
+    }
+    // newCh若是更⻓的那个，说明有新增
+    if (newCh.length > oldCh.length) {
+      newCh.slice(len).forEach((child) => {
+        const el = this.createElm(child);
+        parentElm.appendChild(el);
+      });
+    } else if (newCh.length < oldCh.length) {
+      // oldCh若是更⻓的那个，说明有删减
+      oldCh.slice(len).forEach((child) => {
+        parentElm.removeChild(child.el);
+      });
+    }
   }
+  
+  
+  
 }
 
 // 遍历模板树，解析其中动态部分，初始化并获得更新函数
