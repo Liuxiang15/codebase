@@ -162,9 +162,9 @@ class KVue {
       this.$mount(options.el);
     }
 
-    
+
   }
-  $mount(el){ 
+  $mount (el) {
     // 1、获取宿主
     this.$el = document.querySelector(el)
     // 2、实现更新函数
@@ -176,7 +176,7 @@ class KVue {
       // parent.insertBefore(el, this.$el.nextSibling)
       // parent.removeChild(this.$el)
       // this.$el = el
-      
+
       // vnode版
       const vnode = this.$options.render.call(this, this.$createElement);
       this._update(vnode);
@@ -193,11 +193,11 @@ class KVue {
    * @param {*} children 子元素
    * @returns 
    */
-  $createElement(tag, data, children) {
+  $createElement (tag, data, children) {
     return { tag, data, children };
   }
 
-  _update(vnode) {
+  _update (vnode) {
     // 获取上次vnode，从而决定走初始化还是更新
     const prevVnode = this._vnode;
     if (!prevVnode) {
@@ -214,9 +214,9 @@ class KVue {
    * @param {*} oldVnode 
    * @param {*} vnode 
    */
-  __patch__(oldVnode, vnode){
+  __patch__ (oldVnode, vnode) {
     // 首次进来oldVnode是dom
-    if (oldVnode.nodeType) { 
+    if (oldVnode.nodeType) {
       // init
       // 递归创建
       const el = this.createElm(vnode);
@@ -244,47 +244,47 @@ class KVue {
         }
         else {
           if (typeof oldCh === "string") {
-              // text replace with elmenets
-              el.innerHTML = "";
-              newCh.forEach((child) => el.appendChild(this.createElm(child)));
+            // text replace with elmenets
+            el.innerHTML = "";
+            newCh.forEach((child) => el.appendChild(this.createElm(child)));
           } else {
             // 前后vnode都是列表需要进行双端比较
-              this.updateChildren(el, oldCh, newCh);
-            }
+            this.updateChildren(el, oldCh, newCh);
+          }
         }
       } else {
         // replace
       }
     }
     this._vnode = vnode;
-  } 
+  }
 
   /**
    * 递归创建整棵dom树
    * @returns {Element} el
    */
-    createElm(vnode) { 
-      const el = document.createElement(vnode.tag)
-      // prop
-      // children
+  createElm (vnode) {
+    const el = document.createElement(vnode.tag)
+    // prop
+    // children
 
-      if (vnode.children) {
-        if (typeof vnode.children === "string") {
-          // 子元素是字符串
-          el.textContent = vnode.children
-        } else {
-          // 数组
-          vnode.children.forEach(v => {
-            el.appendChild(this.createElm(v))
+    if (vnode.children) {
+      if (typeof vnode.children === "string") {
+        // 子元素是字符串
+        el.textContent = vnode.children
+      } else {
+        // 数组
+        vnode.children.forEach(v => {
+          el.appendChild(this.createElm(v))
 
-          })
-        }
+        })
       }
-      vnode.el = el // for update
-      return el
     }
-  
-  updateChildren(parentElm, oldCh, newCh) {
+    vnode.el = el // for update
+    return el
+  }
+
+  updateChildren (parentElm, oldCh, newCh) {
     // 这⾥暂且直接patch对应索引的两个节点
     const len = Math.min(oldCh.length, newCh.length);
     for (let i = 0; i < len; i++) {
@@ -303,9 +303,9 @@ class KVue {
       });
     }
   }
-  
-  
-  
+
+
+
 }
 
 // 遍历模板树，解析其中动态部分，初始化并获得更新函数
@@ -343,7 +343,7 @@ class Compile {
             const handlerName = node.getAttribute(attrName)
             console.log('事件处理函数名', handlerName)
             // 看看是否是合法函数名，如果是则执行处理函数
-            this.eventHandler (node, event, handlerName)
+            this.eventHandler(node, event, handlerName)
 
           }
         });
@@ -429,12 +429,12 @@ class Compile {
    * @param {*} node 
    * @param {*} exp 
    */
-  model (node, exp) { 
+  model (node, exp) {
     // update方法只完成赋值和更新
     this.update(node, exp, "model");
 
     // 事件监听
-    node.addEventListener('input', e => { 
+    node.addEventListener('input', e => {
       this.$vm[exp] = e.target.value
     })
   }
