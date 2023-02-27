@@ -418,10 +418,12 @@ class Watcher {
 // 负责通知watchers更新
 class Dep {
   constructor() {
-    this.deps = [];
+    // this.deps = [];
+    this.deps = new Set()
   }
   addDep (dep) {
-    this.deps.push(dep);
+    // this.deps.push(dep);
+    this.deps.add(dep);
   }
   notify () {
     this.deps.forEach((dep) => dep.update());
