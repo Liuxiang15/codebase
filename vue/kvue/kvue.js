@@ -232,14 +232,21 @@ class KVue {
    * 递归创建整棵dom树
    * @returns {Element} el
    */
-  createElm (vnode) { 
+    createElm(vnode) { 
     const el = document.createElement(vnode.tag)
     // prop
     // children
 
     if (vnode.children) {
       if (typeof vnode.children === "string") {
+        // 子元素是字符串
         el.textContent = vnode.children
+      } else {
+        // 数组
+        vnode.children.forEach(v => {
+          el.appendChild(this.createElm(v))
+
+        })
       }
     }
     vnode.el = el // for update

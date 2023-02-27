@@ -13,7 +13,12 @@
       // return h1
       
       // vnode
-      return h('h1', null, this.counter + '')
+      // return h('h1', null, this.counter + '')
+      return h('h1', null, [
+        h('p', {}, this.counter+''),
+        h('p', {}, this.counter*2 + ''),
+        h('p', {}, this.counter*3 + '')
+      ])
     }
   })
   setInterval(() => {
