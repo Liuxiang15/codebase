@@ -65,6 +65,7 @@ function defineReactive(data, key, val) {
         get() {
             // 添加观察者对象 Dep.target 表示观察者
             dep.depend()
+            // 这里收集Array的依赖
             return val
         },
         set(newVal) {
