@@ -4,12 +4,17 @@
  * 新增：在 obsever.js 中使用Dep
  */
 
+import {
+    arrayMethods
+} from './array.js'
 export class Observer {
     constructor(data) {
         this.data = data;
         if (!Array.isArray(this.data)) {
             // 遍历data
             this.walk(data)
+        } else {
+            value.__proto__ = arrayMethods
         }
     }
     /**
