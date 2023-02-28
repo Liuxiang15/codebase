@@ -8,7 +8,8 @@ import {
     arrayMethods
 } from './array.js'
 import {
-    def
+    def,
+    hasOwn
 } from "../util";
 // __proto__是否可用
 const hasProto = '__proto__' in {}
@@ -59,6 +60,8 @@ function defineReactive(data, key, val) {
     if (typeof val === 'object') {
         new Observer(val)
     }
+    let childOb = observe(val)
+
     // 创建Dep对象
     let dep = new Dep()
     Object.defineProperty(data, key, {
@@ -68,6 +71,9 @@ function defineReactive(data, key, val) {
             // 添加观察者对象 Dep.target 表示观察者
             dep.depend()
             // 这里收集Array的依赖
+            if (childOb) {
+                childOb.dep.depend()
+            }
             return val
         },
         set(newVal) {
@@ -88,4 +94,23 @@ function copyAugment(target, src, keys) {
         const key = keys[i]
         def(target, key, src[key])
     }
+}
+/*** 
+ * 尝试为value 创建一个Observer实例
+ * 如果创建成功，直接返回新创建的 Observer 实例。
+ * 如果value已经存在一个 Observer 实例，则直接返回它
+ **/
+export function observe(value, asRootData) {
+    // !isObject(value)
+    if (typeof value !== 'object') {
+        return
+    }
+    let ob;
+    if (hasOwn(value, '__ob__') && value.__ob__ instanceof Observer) {
+        ob = value.__ob__
+    } else {
+        ob = new Observer(value)
+
+    }
+    return ob
 }
