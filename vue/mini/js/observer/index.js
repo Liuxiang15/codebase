@@ -14,7 +14,7 @@ export class Observer {
             // 遍历data
             this.walk(data)
         } else {
-            value.__proto__ = arrayMethods
+            data.__proto__ = arrayMethods
         }
     }
     /**
