@@ -1,6 +1,6 @@
 import {
     Observer
-} from "./observer.js"
+} from "./observer/index.js"
 /* vue.js */
 export default class Vue {
     constructor(options) {
