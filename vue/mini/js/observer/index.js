@@ -17,6 +17,8 @@ const arrayKeys = Object.getOwnPropertyNames(arrayMethods)
 export class Observer {
     constructor(data) {
         this.data = data;
+        this.dep = new Dep();
+
         if (!Array.isArray(this.data)) {
             // 遍历data
             this.walk(data)
