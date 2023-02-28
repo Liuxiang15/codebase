@@ -7,6 +7,13 @@
 import {
     arrayMethods
 } from './array.js'
+import {
+    def
+} from "../util";
+// __proto__是否可用
+const hasProto = '__proto__' in {}
+const arrayKeys = Object.getOwnPropertyNames(arrayMethods)
+
 export class Observer {
     constructor(data) {
         this.data = data;
@@ -14,7 +21,10 @@ export class Observer {
             // 遍历data
             this.walk(data)
         } else {
-            data.__proto__ = arrayMethods
+            // data.__proto__ = arrayMethods
+            const augment = hasProto ? protoAugment : copyAugment
+            augment(value, arrayMethods, arrayKeys)
+
         }
     }
     /**
@@ -64,4 +74,15 @@ function defineReactive(data, key, val) {
             dep.notify()
         }
     })
+}
+
+function protoAugment(target, src, keys) {
+    target.__proto__ = src
+}
+
+function copyAugment(target, src, keys) {
+    for (let i = 0, l = keys.length; i < l; i++) {
+        const key = keys[i]
+        def(target, key, src[key])
+    }
 }
