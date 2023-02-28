@@ -95,6 +95,13 @@ class Compiler {
                 // 'msg' 作为 key 去Vue 找这个变量
                 let key = attr.value
                 this.update(node, key, attrName)
+            } else if (this.isEvent(attrName)) {
+                const event = attrName.substring(1); // 获取到事件名
+                const handlerName = node.getAttribute(attrName)
+                // console.log('事件处理函数名', handlerName)
+                // 看看是否是合法函数名，如果是则执行处理函数
+                this.eventHandler(node, event, handlerName)
+
             }
         })
     }
@@ -175,5 +182,23 @@ class Compiler {
     }
     isTextNode(node) {
         return node.nodeType === 3
+    }
+
+    isEvent(attrName) {
+        return attrName.startsWith("@");
+    }
+
+    eventHandler(node, event, handlerName) {
+        console.log('handlerName', handlerName)
+        const fn = this.vm[handlerName]
+        if (fn) {
+            // node.addEventListener(event, () => {
+            //   this.$vm[handlerName].call(this.$vm)
+            // })
+            node.addEventListener(event, fn.bind(this.vm))
+        } else {
+            console.error(`${event}函数不存在！`)
+        }
+
     }
 }

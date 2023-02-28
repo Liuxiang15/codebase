@@ -13,6 +13,7 @@ export default class Vue {
         this.$data = options.data || {}
         // 调用_proxyData处理data中的属性
         this._proxyData(this.$data)
+        this._proxyData(this.$options.methods)
         // 使用 Obsever 把data中的数据转为响应式
         new Observer(this.$data)
         // 这里为什么做了两个重复性的操作呢？重复性两次把 data的属性转为响应式
@@ -43,4 +44,7 @@ export default class Vue {
             })
         })
     }
+
+
+
 }

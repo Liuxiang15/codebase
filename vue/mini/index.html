@@ -24,6 +24,10 @@
             <p>测试v-html</p>
             <p v-html="desc"></p>
         </div>
+        <div>
+            测试array元素添加
+            <button @click="addArr">数组增加元素</button>
+        </div>
 
     </div>
     <script src="./js/dep.js"></script>
@@ -39,6 +43,14 @@
                 desc: '<span style="color: red">飞人好帅</span>',
                 info: {
                     hobby: 'coding'
+                },
+                arr: [1, 2, 3, 4, 5]
+
+            },
+            methods: {
+                addArr() {
+                    console.log('in addArr')
+                    this.arr.push(6)
                 }
             }
         })

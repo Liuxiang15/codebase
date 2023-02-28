@@ -5,7 +5,7 @@ export const arrayMethods = Object.create(arrayProto);
   const original = arrayProto[method];
   Object.defineProperty(arrayMethods, method, {
     value: function mutator(...args) {
-      console.log(`Array的${method}方法被访问`)
+      alert(`Array的${method}方法被访问`)
       return original.apply(this, args)
     },
     enumerable: false,
