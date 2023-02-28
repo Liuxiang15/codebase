@@ -148,7 +148,7 @@ class KVue {
     // 0.保存选项
     this.$options = options;
     this.$data = options.data;
-    this.$methods = options.methods
+    this.$methods = options.methods || {}
 
     // 1.响应式: 递归遍历data中的对象，做响应式处理
     observe(this.$data);
@@ -157,8 +157,155 @@ class KVue {
     proxy(this);
 
     // 2.编译模板
-    new Compile(options.el, this);
+    // new Compile(options.el, this);
+    if (options.el) {
+      this.$mount(options.el);
+    }
+
+
   }
+  $mount (el) {
+    // 1、获取宿主
+    this.$el = document.querySelector(el)
+    // 2、实现更新函数
+    const updateComponent = () => {
+      // dom版本
+      // 执行render，获取视图结构
+      // const el = this.$options.render.call(this)
+      // const parent = this.$el.parentElement;
+      // parent.insertBefore(el, this.$el.nextSibling)
+      // parent.removeChild(this.$el)
+      // this.$el = el
+
+      // vnode版
+      const vnode = this.$options.render.call(this, this.$createElement);
+      this._update(vnode);
+    }
+    // 3.创建Watcher实例
+    // updateComponent()
+    new Watcher(this, updateComponent)
+
+  }
+  /**
+   * 简易版
+   * @param {*} tag 标签
+   * @param {*} data  属性对象
+   * @param {*} children 子元素
+   * @returns 
+   */
+  $createElement (tag, data, children) {
+    return { tag, data, children };
+  }
+
+  _update (vnode) {
+    // 获取上次vnode，从而决定走初始化还是更新
+    const prevVnode = this._vnode;
+    if (!prevVnode) {
+      // init
+      this.__patch__(this.$el, vnode);
+    } else {
+      // update
+      this.__patch__(prevVnode, vnode);
+    }
+  }
+
+  /**
+   * 将vnode -> dom
+   * @param {*} oldVnode 
+   * @param {*} vnode 
+   */
+  __patch__ (oldVnode, vnode) {
+    // 首次进来oldVnode是dom
+    if (oldVnode.nodeType) {
+      // init
+      // 递归创建
+      const el = this.createElm(vnode);
+      const parent = oldVnode.parentElement;
+      const refElm = oldVnode.nextSibling;
+      parent.insertBefore(el, refElm);
+      parent.removeChild(oldVnode);
+    } else {
+      // update 
+      const el = (vnode.el = oldVnode.el); // 先保存真实dom
+      if (oldVnode.tag === vnode.tag) {
+        // 判断双方子元素情况
+        const oldCh = oldVnode.children;
+        const newCh = vnode.children;
+        if (typeof newCh === "string") {
+          if (typeof oldCh === "string") {
+            // text update
+            if (newCh !== oldCh) {
+              el.textContent = newCh;
+            } else {
+              // elements replace with text
+              el.textContent = newCh;
+            }
+          }
+        }
+        else {
+          if (typeof oldCh === "string") {
+            // text replace with elmenets
+            el.innerHTML = "";
+            newCh.forEach((child) => el.appendChild(this.createElm(child)));
+          } else {
+            // 前后vnode都是列表需要进行双端比较
+            this.updateChildren(el, oldCh, newCh);
+          }
+        }
+      } else {
+        // replace
+      }
+    }
+    this._vnode = vnode;
+  }
+
+  /**
+   * 递归创建整棵dom树
+   * @returns {Element} el
+   */
+  createElm (vnode) {
+    const el = document.createElement(vnode.tag)
+    // prop
+    // children
+
+    if (vnode.children) {
+      if (typeof vnode.children === "string") {
+        // 子元素是字符串
+        el.textContent = vnode.children
+      } else {
+        // 数组
+        vnode.children.forEach(v => {
+          el.appendChild(this.createElm(v))
+
+        })
+      }
+    }
+    vnode.el = el // for update
+    return el
+  }
+
+  updateChildren (parentElm, oldCh, newCh) {
+    // 这⾥暂且直接patch对应索引的两个节点
+    const len = Math.min(oldCh.length, newCh.length);
+    for (let i = 0; i < len; i++) {
+      this.__patch__(oldCh[i], newCh[i]);
+    }
+    // newCh若是更⻓的那个，说明有新增
+    if (newCh.length > oldCh.length) {
+      newCh.slice(len).forEach((child) => {
+        const el = this.createElm(child);
+        parentElm.appendChild(el);
+      });
+    } else if (newCh.length < oldCh.length) {
+      // oldCh若是更⻓的那个，说明有删减
+      oldCh.slice(len).forEach((child) => {
+        parentElm.removeChild(child.el);
+      });
+    }
+  }
+
+
+
 }
 
 // 遍历模板树，解析其中动态部分，初始化并获得更新函数
@@ -196,7 +343,7 @@ class Compile {
             const handlerName = node.getAttribute(attrName)
             console.log('事件处理函数名', handlerName)
             // 看看是否是合法函数名，如果是则执行处理函数
-            this.eventHandler (node, event, handlerName)
+            this.eventHandler(node, event, handlerName)
 
           }
         });
@@ -282,12 +429,12 @@ class Compile {
    * @param {*} node 
    * @param {*} exp 
    */
-  model (node, exp) { 
+  model (node, exp) {
     // update方法只完成赋值和更新
     this.update(node, exp, "model");
 
     // 事件监听
-    node.addEventListener('input', e => { 
+    node.addEventListener('input', e => {
       this.$vm[exp] = e.target.value
     })
   }
@@ -301,21 +448,23 @@ class Compile {
 
 // 负责具体节点更新
 class Watcher {
-  constructor(vm, key, updater) {
+  constructor(vm, fn) {
     this.vm = vm;
-    this.key = key;
-    this.updater = updater;
+    this.getter = fn
+    this.get()
 
+  }
+
+  get () {
     // 读当前值，触发依赖收集
     Dep.target = this
-    this.vm[this.key]
+    this.getter.call(this.vm)
     Dep.target = null
   }
 
   // Dep将来会调用update
   update () {
-    const val = this.vm[this.key];
-    this.updater.call(this.vm, val);
+    this.get()
   }
 }
 
@@ -323,10 +472,12 @@ class Watcher {
 // 负责通知watchers更新
 class Dep {
   constructor() {
-    this.deps = [];
+    // this.deps = [];
+    this.deps = new Set()
   }
   addDep (dep) {
-    this.deps.push(dep);
+    // this.deps.push(dep);
+    this.deps.add(dep);
   }
   notify () {
     this.deps.forEach((dep) => dep.update());
