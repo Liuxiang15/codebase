@@ -5,12 +5,11 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>mini-vue</title>
 </head>
 
 <body>
     <div id="app">
-        {{msg}}<br />
         <p>测试插值普通属性-年龄：{{age}}</p>
         <p>测试插值嵌套属性-info里的hoby：{{info.hobby}}</p>
         <div>
@@ -30,9 +29,8 @@
     <script src="./js/dep.js"></script>
     <script src="./js/watcher.js"></script>
     <script src="./js/compiler.js"></script>
-    <script src="./js/observer.js"></script>
-    <script src="./js/vue.js"></script>
-    <script>
+    <script type="module">
+        import Vue from './js/vue.js'
         let vm = new Vue({
             el: '#app',
             data: {

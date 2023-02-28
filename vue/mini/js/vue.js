@@ -1,11 +1,14 @@
+import {
+    Observer
+} from "./observer.js"
 /* vue.js */
-class Vue { 
+export default class Vue {
     constructor(options) {
         this.$options = options || {}
         //获取el,支持传入选择器和dom
-        this.$el = typeof options.el === 'string'
-            ? document.querySelector(options.el)
-            : options.el
+        this.$el = typeof options.el === 'string' ?
+            document.querySelector(options.el) :
+            options.el
         // 获取data
         this.$data = options.data || {}
         // 调用_proxyData处理data中的属性
@@ -20,8 +23,8 @@ class Vue {
 
     }
     // 将data中的属性注册到Vue
-    _proxyData (data) { 
-        Object.keys(data).forEach(key => { 
+    _proxyData(data) {
+        Object.keys(data).forEach(key => {
             // 数据劫持
             // 把每个data的属性，添加到Vue转化为getter setter
             Object.defineProperty(this, key, {
@@ -29,10 +32,10 @@ class Vue {
                 enumerable: true,
                 // 可配置
                 configurable: true,
-                get () { 
+                get() {
                     return data[key]
                 },
-                set (newValue) { 
+                set(newValue) {
                     if (newValue === data[key]) return
                     data[key] = newValue
                 }

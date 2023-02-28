@@ -4,7 +4,7 @@
  * 新增：在 obsever.js 中使用Dep
  */
 
-class Observer {
+export class Observer {
     constructor(data) {
         this.data = data;
         if (!Array.isArray(this.data)) {
@@ -25,7 +25,6 @@ class Observer {
         for (let i = 0; i < keys.length; i++) {
             this.defineReactive(data, keys[i], data[keys[i]])
         }
-
     }
     /**
      * 转为响应式
@@ -37,10 +36,10 @@ class Observer {
      * @param {*} val 
      */
     defineReactive(data, key, val) {
-        // 如果是对象类型的 也调用walk 变成响应式，不是对象类型的直接在walk会被return
-        this.walk(val)
-        // 保存this
-        const self = this
+        // 递归子属性
+        if (typeof val === 'object') {
+            new Observer(val)
+        }
         // 创建Dep对象
         let dep = new Dep()
         Object.defineProperty(data, key, {
@@ -54,8 +53,6 @@ class Observer {
             set(newVal) {
                 if (newVal === val) return
                 val = newVal
-                // 赋值的话如果是newVal是对象，对象里面的属性也应该设置为响应式的
-                self.walk(newVal)
                 // 触发通知 更新视图
                 dep.notify()
             }
