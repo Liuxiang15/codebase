@@ -23,39 +23,40 @@ export class Observer {
         if (!data || typeof data !== 'object') return
         const keys = Object.keys(data)
         for (let i = 0; i < keys.length; i++) {
-            this.defineReactive(data, keys[i], data[keys[i]])
+            defineReactive(data, keys[i], data[keys[i]])
         }
     }
-    /**
-     * 转为响应式
-     * 要注意的 和vue.js 写的不同的是
-     * vue.js中是将 属性给了 Vue 转为 getter setter
-     * 这里是 将data中的属性转为getter setter
-     * @param {*} data 
-     * @param {*} key 
-     * @param {*} val 
-     */
-    defineReactive(data, key, val) {
-        // 递归子属性
-        if (typeof val === 'object') {
-            new Observer(val)
-        }
-        // 创建Dep对象
-        let dep = new Dep()
-        Object.defineProperty(data, key, {
-            enumerable: true,
-            configurable: true,
-            get() {
-                // 添加观察者对象 Dep.target 表示观察者
-                dep.depend()
-                return val
-            },
-            set(newVal) {
-                if (newVal === val) return
-                val = newVal
-                // 触发通知 更新视图
-                dep.notify()
-            }
-        })
+}
+
+/**
+ * 转为响应式
+ * 要注意的 和vue.js 写的不同的是
+ * vue.js中是将 属性给了 Vue 转为 getter setter
+ * 这里是 将data中的属性转为getter setter
+ * @param {*} data 
+ * @param {*} key 
+ * @param {*} val 
+ */
+function defineReactive(data, key, val) {
+    // 递归子属性
+    if (typeof val === 'object') {
+        new Observer(val)
     }
+    // 创建Dep对象
+    let dep = new Dep()
+    Object.defineProperty(data, key, {
+        enumerable: true,
+        configurable: true,
+        get() {
+            // 添加观察者对象 Dep.target 表示观察者
+            dep.depend()
+            return val
+        },
+        set(newVal) {
+            if (newVal === val) return
+            val = newVal
+            // 触发通知 更新视图
+            dep.notify()
+        }
+    })
 }
