@@ -11,11 +11,21 @@
 <body>
     <div id="app">
         {{msg}}<br />
-        {{age}}<br />
-        <p>爱好：{{info.hobby}}</p>
-        <div v-text="msg"></div>
-        <input v-model="desc" type="text">
-        <p v-html="desc"></p>
+        <p>测试插值普通属性-年龄：{{age}}</p>
+        <p>测试插值嵌套属性-info里的hoby：{{info.hobby}}</p>
+        <div>
+            <p>测试v-text</p>
+            <div v-text="msg"></div>
+        </div>
+        <div>
+            <p>测试v-model</p>
+            <input v-model="desc" type="text">
+        </div>
+        <div>
+            <p>测试v-html</p>
+            <p v-html="desc"></p>
+        </div>
+
     </div>
     <script src="./js/dep.js"></script>
     <script src="./js/watcher.js"></script>

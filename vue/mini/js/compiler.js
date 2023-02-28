@@ -1,21 +1,21 @@
 /**
  * 解析简单路径
  */
- const bailRE = /[^\w.$]/
 
- function parsePath(path) {
-     if (bailRE.test(path)) {
-         return
-     }
-     const segments = path.split('.')
-     return function (obj) {
-         for (let i = 0; i < segments.length; i++) {
-             if (!obj) return
-             obj = obj[segments[i]]
-         }
-         return obj
-     }
- }
+function parsePath(path) {
+    const bailRE = /[^\w.$]/
+    if (bailRE.test(path)) {
+        return
+    }
+    const segments = path.split('.')
+    return function (obj) {
+        for (let i = 0; i < segments.length; i++) {
+            if (!obj) return
+            obj = obj[segments[i]]
+        }
+        return obj
+    }
+}
 /**
  * compiler.js
  * 实现对文本节点 和 元素节点指令编译
@@ -68,8 +68,12 @@ class Compiler {
         if (reg.test(val)) {
             // 获取分组1，也就是{{}}里面的内容， 去除前后空格
             let key = RegExp.$1.trim()
+            console.log('key', key)
+            // key的格式可能是info.hobby,所以不能直接this.vm[key]
+            const getter = parsePath(key)
+            const value = getter.call(this.vm, this.vm)
             // 进行替换再赋值给node
-            node.textContent = val.replace(reg, this.vm[key])
+            node.textContent = val.replace(reg, value)
             // 创建观察者
             new Watcher(this.vm, key, newValue => {
                 node.textContent = newValue

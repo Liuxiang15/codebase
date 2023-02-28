@@ -49,9 +49,10 @@ class Watcher {
 /**
  * 解析简单路径
  */
-const bailRE = /[^\w.$]/
 
 function parsePath(path) {
+    const bailRE = /[^\w.$]/ //防止公共变量名冲突
+
     if (bailRE.test(path)) {
         return
     }
