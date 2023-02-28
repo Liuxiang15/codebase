@@ -6,19 +6,26 @@
 
 class Observer {
     constructor(data) {
-        // 遍历data
-        this.walk(data)
+        this.data = data;
+        if (!Array.isArray(this.data)) {
+            // 遍历data
+            this.walk(data)
+        }
     }
     /**
      * 遍历data转为响应式
+     * walk会将每一个属性都转换成getter/setter的形式来侦测变化
+     * 这个方法只有在数据类型为Object 时被调用
      * @param {*} data 
      */
     walk(data) {
         // 空和基本类型
         if (!data || typeof data !== 'object') return
-        Object.keys(data).forEach(key => {
-            this.defineReactive(data, key, data[key])
-        })
+        const keys = Object.keys(data)
+        for (let i = 0; i < keys.length; i++) {
+            this.defineReactive(data, keys[i], data[keys[i]])
+        }
+
     }
     /**
      * 转为响应式
