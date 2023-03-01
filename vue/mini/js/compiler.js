@@ -74,6 +74,8 @@ class Compiler {
             node.textContent = val.replace(reg, this.getShowContent(value))
             // 创建观察者
             new Watcher(this.vm, key, (newValue, oldValue) => {
+                console.log('watcher changes', newValue)
+
                 let newContent = this.getShowContent(newValue)
                 node.textContent = newContent
             })
