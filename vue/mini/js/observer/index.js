@@ -10,19 +10,22 @@ import {
 import {
     def,
     hasOwn
-} from "../util";
+} from "../util/index.js";
 // __proto__是否可用
 const hasProto = '__proto__' in {}
 const arrayKeys = Object.getOwnPropertyNames(arrayMethods)
 
 export class Observer {
-    constructor(data) {
-        this.data = data;
+    constructor(value) {
+        this.value = value;
         this.dep = new Dep();
+        def(value, '__ob__', this)
+        // 1、_ob__的作用不仅仅是为了在拦截器中访问 Observer实例这么简单
+        // 2、还可以用来标记当前value是否已经被 Observer转换成了响应式数据。
 
-        if (!Array.isArray(this.data)) {
+        if (!Array.isArray(this.value)) {
             // 遍历data
-            this.walk(data)
+            this.walk(value)
         } else {
             // data.__proto__ = arrayMethods
             const augment = hasProto ? protoAugment : copyAugment
