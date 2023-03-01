@@ -25,6 +25,10 @@
             <p v-html="desc"></p>
         </div>
         <div>
+            <p>测试array</p>
+            <p>{{arr}}</p>
+        </div>
+        <div>
             测试array元素添加
             <button @click="addArr">数组增加元素</button>
         </div>
@@ -49,8 +53,8 @@
             },
             methods: {
                 addArr() {
-                    console.log('in addArr')
                     this.arr.push(6)
+                    window.arr = this.arr
                 }
             }
         })

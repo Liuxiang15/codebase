@@ -37,12 +37,15 @@ class Watcher {
         // let newValue = this.vm[this.expOrFn]
         const oldValue = this.value
         const newValue = this.get()
-        // 比较新旧(也可以放在外层进行判断)
-        if (newValue === oldValue) return
-        this.value = newValue
-        // 调用具体的更新方法
-        // this.cb(newValue)
-        this.cb.call(this.vm, this.value, oldValue)
+        // 比较新旧(也可以放在外层进行判断) 
+        // 注意：判断数组相同不能通过这种方式
+        if (newValue !== oldValue || typeof newValue === 'object') {
+            this.value = newValue
+            // 调用具体的更新方法
+            // this.cb(newValue)
+            // console.log('watcher.js:update function newValue', newValue)
+            this.cb.call(this.vm, this.value, oldValue)
+        }
     }
 }
 

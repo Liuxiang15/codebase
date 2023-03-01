@@ -13,7 +13,7 @@ const arrayProto = Object.create(originProto);
   }
 })
 
-function defineReactive (obj, key, val) {
+function defineReactive(obj, key, val) {
   // 递归
   observe(val);
 
@@ -21,13 +21,13 @@ function defineReactive (obj, key, val) {
 
   // 属性拦截
   Object.defineProperty(obj, key, {
-    get () {
+    get() {
       // console.log("get", key);
       // 依赖收集建立
       Dep.target && dep.addDep(Dep.target)
       return val;
     },
-    set (newVal) {
+    set(newVal) {
       if (newVal !== val) {
         // console.log("set", key);
         observe(newVal);
@@ -40,7 +40,7 @@ function defineReactive (obj, key, val) {
 }
 
 // 遍历传入obj的所有属性，执行响应式处理
-function observe (obj) {
+function observe(obj) {
   //首先判断obj是对象
   if (typeof obj !== "object" || obj == null) {
     return obj;
@@ -119,13 +119,13 @@ function observe (obj) {
 //     }
 // }
 
-function proxy (vm) {
+function proxy(vm) {
   Object.keys(vm.$data).forEach((key) => {
     Object.defineProperty(vm, key, {
-      get () {
+      get() {
         return vm.$data[key];
       },
-      set (v) {
+      set(v) {
         vm.$data[key] = v;
       },
     });
@@ -133,7 +133,7 @@ function proxy (vm) {
   // 新增methods
   Object.keys(vm.$methods).forEach((key) => {
     Object.defineProperty(vm, key, {
-      get () {
+      get() {
         return vm.$methods[key];
       },
       // set(v) {
@@ -164,7 +164,7 @@ class KVue {
 
 
   }
-  $mount (el) {
+  $mount(el) {
     // 1、获取宿主
     this.$el = document.querySelector(el)
     // 2、实现更新函数
@@ -193,11 +193,15 @@ class KVue {
    * @param {*} children 子元素
    * @returns 
    */
-  $createElement (tag, data, children) {
-    return { tag, data, children };
+  $createElement(tag, data, children) {
+    return {
+      tag,
+      data,
+      children
+    };
   }
 
-  _update (vnode) {
+  _update(vnode) {
     // 获取上次vnode，从而决定走初始化还是更新
     const prevVnode = this._vnode;
     if (!prevVnode) {
@@ -214,7 +218,7 @@ class KVue {
    * @param {*} oldVnode 
    * @param {*} vnode 
    */
-  __patch__ (oldVnode, vnode) {
+  __patch__(oldVnode, vnode) {
     // 首次进来oldVnode是dom
     if (oldVnode.nodeType) {
       // init
@@ -241,8 +245,7 @@ class KVue {
               el.textContent = newCh;
             }
           }
-        }
-        else {
+        } else {
           if (typeof oldCh === "string") {
             // text replace with elmenets
             el.innerHTML = "";
@@ -263,7 +266,7 @@ class KVue {
    * 递归创建整棵dom树
    * @returns {Element} el
    */
-  createElm (vnode) {
+  createElm(vnode) {
     const el = document.createElement(vnode.tag)
     // prop
     // children
@@ -284,7 +287,7 @@ class KVue {
     return el
   }
 
-  updateChildren (parentElm, oldCh, newCh) {
+  updateChildren(parentElm, oldCh, newCh) {
     // 这⾥暂且直接patch对应索引的两个节点
     const len = Math.min(oldCh.length, newCh.length);
     for (let i = 0; i < len; i++) {
@@ -321,7 +324,7 @@ class Compile {
     this.compile(dom);
   }
 
-  compile (el) {
+  compile(el) {
     // 遍历el
     const childNodes = el.childNodes;
     childNodes.forEach((node) => {
@@ -341,7 +344,6 @@ class Compile {
           } else if (this.isEvent(attrName)) {
             const event = attrName.substring(1); // 获取到事件名
             const handlerName = node.getAttribute(attrName)
-            console.log('事件处理函数名', handlerName)
             // 看看是否是合法函数名，如果是则执行处理函数
             this.eventHandler(node, event, handlerName)
 
@@ -362,7 +364,7 @@ class Compile {
 
   // 处理所有动态绑定
   // dir指的就是指令名称
-  update (node, exp, dir) {
+  update(node, exp, dir) {
     // 1.初始化
     const fn = this[dir + "Updater"];
     fn && fn(node, this.$vm[exp]);
@@ -373,46 +375,46 @@ class Compile {
   }
 
   // k-text
-  text (node, exp) {
+  text(node, exp) {
     this.update(node, exp, "text");
   }
-  textUpdater (node, val) {
+  textUpdater(node, val) {
     node.textContent = val;
   }
 
   // k-html
-  html (node, exp) {
+  html(node, exp) {
     this.update(node, exp, "html");
   }
-  htmlUpdater (node, val) {
+  htmlUpdater(node, val) {
     node.innerHTML = val;
   }
 
   // 解析{{ooxx}}
-  compileText (node) {
+  compileText(node) {
     this.update(node, RegExp.$1, "text");
     // 1.获取表达式的值
     // node.textContent = this.$vm[RegExp.$1]
   }
 
-  isElement (node) {
+  isElement(node) {
     return node.nodeType === 1;
   }
 
   // {{ooxx}}
-  isInter (node) {
+  isInter(node) {
     return node.nodeType === 3 && /\{\{(.*)\}\}/.test(node.textContent);
   }
 
-  isDir (attrName) {
+  isDir(attrName) {
     return attrName.startsWith("k-");
   }
 
-  isEvent (attrName) {
+  isEvent(attrName) {
     return attrName.startsWith("@");
   }
 
-  eventHandler (node, event, handlerName) {
+  eventHandler(node, event, handlerName) {
     const fn = this.$vm[handlerName]
     if (fn) {
       // node.addEventListener(event, () => {
@@ -429,7 +431,7 @@ class Compile {
    * @param {*} node 
    * @param {*} exp 
    */
-  model (node, exp) {
+  model(node, exp) {
     // update方法只完成赋值和更新
     this.update(node, exp, "model");
 
@@ -439,7 +441,7 @@ class Compile {
     })
   }
 
-  modelUpdater (node, value) {
+  modelUpdater(node, value) {
     // 表单元素赋值
     node.value = value
 
@@ -455,7 +457,7 @@ class Watcher {
 
   }
 
-  get () {
+  get() {
     // 读当前值，触发依赖收集
     Dep.target = this
     this.getter.call(this.vm)
@@ -463,7 +465,7 @@ class Watcher {
   }
 
   // Dep将来会调用update
-  update () {
+  update() {
     this.get()
   }
 }
@@ -475,11 +477,11 @@ class Dep {
     // this.deps = [];
     this.deps = new Set()
   }
-  addDep (dep) {
+  addDep(dep) {
     // this.deps.push(dep);
     this.deps.add(dep);
   }
-  notify () {
+  notify() {
     this.deps.forEach((dep) => dep.update());
   }
 }

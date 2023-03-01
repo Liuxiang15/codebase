@@ -24,7 +24,6 @@ function parsePath(path) {
  */
 class Compiler {
     constructor(vm) {
-        console.log('Compiler constrcutor', vm)
         this.vm = vm
         this.el = vm.$el
         // 编译模板
@@ -58,7 +57,7 @@ class Compiler {
      * @param {*} node 
      */
     compileText(node) {
-        console.log('compileText', node)
+        // console.log('compileText', node)
         // 核心思想利用把正则表达式把{{}}去掉找到里面的变量
         // 再去Vue找这个变量赋值给node.textContent
         let reg = /\{\{(.+?)\}\}/
@@ -68,14 +67,13 @@ class Compiler {
         if (reg.test(val)) {
             // 获取分组1，也就是{{}}里面的内容， 去除前后空格
             let key = RegExp.$1.trim()
-            console.log('key', key)
             // key的格式可能是info.hobby,所以不能直接this.vm[key]
             const getter = parsePath(key)
             const value = getter.call(this.vm, this.vm)
             // 进行替换再赋值给node
             node.textContent = val.replace(reg, value)
             // 创建观察者
-            new Watcher(this.vm, key, newValue => {
+            new Watcher(this.vm, key, (newValue, oldValue) => {
                 node.textContent = newValue
             })
         }
@@ -189,7 +187,6 @@ class Compiler {
     }
 
     eventHandler(node, event, handlerName) {
-        console.log('handlerName', handlerName)
         const fn = this.vm[handlerName]
         if (fn) {
             // node.addEventListener(event, () => {

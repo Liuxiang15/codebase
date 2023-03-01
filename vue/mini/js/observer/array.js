@@ -6,9 +6,12 @@ export const arrayMethods = Object.create(arrayProto);
   Object.defineProperty(arrayMethods, method, {
     value: function mutator(...args) {
       const ob = this.__ob__
-      console.log('array ob', ob)
-      alert(`Array的${method}方法被访问`)
-      return original.apply(this, args)
+      // ob.dep.notify()
+      // alert(`Array的${method}方法被访问`)
+      const res = original.apply(this, args)
+      ob.dep.notify()
+      return res // 保证数组更新后再通知
+      // return original.apply(this, args)
     },
     enumerable: false,
     writable: true,
