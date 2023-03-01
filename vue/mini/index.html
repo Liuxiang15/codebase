@@ -48,17 +48,25 @@
                 info: {
                     hobby: 'coding'
                 },
-                arr: [1, 2, 3, 4, 5]
+                arr: [{
+                    name: '张三',
+                    age: 18
+                }, { name: '李四', age: 19 }]
 
             },
             methods: {
                 addArr() {
-                    this.arr.push(6)
-                    window.arr = this.arr
+                    this.arr.push({
+                        name: '王五',
+                        age: 20
+                    })
                 }
             }
         })
         console.log(vm)
+    </script>
+
+
     </script>
 
     <script>

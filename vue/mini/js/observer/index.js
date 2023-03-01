@@ -30,6 +30,7 @@ export class Observer {
             // data.__proto__ = arrayMethods
             const augment = hasProto ? protoAugment : copyAugment
             augment(value, arrayMethods, arrayKeys)
+            this.observeArray(value)
 
         }
     }
@@ -45,6 +46,15 @@ export class Observer {
         const keys = Object.keys(data)
         for (let i = 0; i < keys.length; i++) {
             defineReactive(data, keys[i], data[keys[i]])
+        }
+    }
+
+    /**
+     * 侦测Array中的每一项
+     */
+    observeArray(items) {
+        for (let i = 0; i < items.length; i++) {
+            observe(items[i])
         }
     }
 }

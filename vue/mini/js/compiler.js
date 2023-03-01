@@ -71,12 +71,28 @@ class Compiler {
             const getter = parsePath(key)
             const value = getter.call(this.vm, this.vm)
             // 进行替换再赋值给node
-            node.textContent = val.replace(reg, value)
+            node.textContent = val.replace(reg, this.getShowContent(value))
             // 创建观察者
             new Watcher(this.vm, key, (newValue, oldValue) => {
-                node.textContent = newValue
+                let newContent = this.getShowContent(newValue)
+                node.textContent = newContent
             })
         }
+    }
+    /**
+     * 根据原始类型转化成展示的内容
+     * @param {*} newValue 
+     * @returns  newContent
+     */
+    getShowContent(newValue) {
+        let newContent = newValue
+
+        if (Array.isArray(newValue)) {
+            newContent = newValue.map(i => JSON.stringify(i)).join('')
+        } else if (typeof newValue === 'object') {
+            newContent = JSON.stringify(newValue)
+        } else {}
+        return newContent
     }
     /**
      * 编译元素节点（只处理指令）
