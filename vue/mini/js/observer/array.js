@@ -6,6 +6,17 @@ export const arrayMethods = Object.create(arrayProto);
   Object.defineProperty(arrayMethods, method, {
     value: function mutator(...args) {
       const ob = this.__ob__
+      let inserted
+      switch (method) {
+        case 'push':
+        case 'unshift':
+          inserted = args
+          break
+        case 'splice':
+          inserted = args.slice(2)
+          break
+      }
+
       // ob.dep.notify()
       // alert(`Array的${method}方法被访问`)
       const res = original.apply(this, args)
