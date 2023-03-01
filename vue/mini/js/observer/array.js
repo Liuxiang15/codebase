@@ -16,6 +16,9 @@ export const arrayMethods = Object.create(arrayProto);
           inserted = args.slice(2)
           break
       }
+      if (inserted) {
+        ob.observeArray(inserted)
+      }
 
       // ob.dep.notify()
       // alert(`Array的${method}方法被访问`)
