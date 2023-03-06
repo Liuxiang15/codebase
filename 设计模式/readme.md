@@ -7,3 +7,5 @@
 
 
 ### Web开发应了解的5种设计模式: https://juejin.cn/post/6859506910652006414#heading-7
+
+### JavaScript设计模式es6（23种)：https://juejin.cn/post/6844904032826294286 
